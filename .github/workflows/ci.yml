@@ -1,0 +1,39 @@
+name: CI (Docker Compose Tests)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest   # 如要用你自己的自托管 Runner，改为：self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      # 可选：更快的构建器
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build images
+        run: docker compose -f compose.test.yml build
+
+      - name: Start dependencies
+        run: docker compose -f compose.test.yml up -d db redis
+
+      - name: Run tests
+        run: docker compose -f compose.test.yml run --rm sut pytest -q
+
+      - name: Teardown
+        if: always()
+        run: docker compose -f compose.test.yml down -v
+
+      - name: Collect logs
+        if: always()
+        run: docker compose -f compose.test.yml logs --no-color > compose.log || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compose-logs
+          path: compose.log

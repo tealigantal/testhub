@@ -8,5 +8,11 @@ RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir
 # 再拷贝源码
 COPY . .
 
+# 安装本地包，确保容器内能导入 scicalc
+RUN pip install --no-cache-dir -e .
+
 # 默认命令（CI里不会用到，compose 的 sut 会覆盖为 pytest）
-CMD ["python", "-c", "print('image ready')"]
+EXPOSE 8000
+
+# 默认运行内置的简易 HTTP 服务器，提供前端页面和计算接口
+CMD ["python", "-m", "scicalc.web"]

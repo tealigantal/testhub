@@ -20,7 +20,9 @@ services:
   # 你的应用镜像（测试与运行共用同一镜像）
   app:
     build: .
-    image: yourapp:test
+    image: scicalc:test
+    ports:
+      - "8000:8000"
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
       REDIS_URL: redis://redis:6379/0
@@ -30,7 +32,7 @@ services:
 
   # SUT（system under test）：跑 pytest
   sut:
-    image: yourapp:test
+    image: scicalc:test
     working_dir: /app
     command: pytest -q
     environment:

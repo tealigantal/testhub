@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Scicalc</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <div class="screen" id="screen" aria-live="polite" aria-atomic="true" tabindex="0">0</div>
+    <div class="keys" role="group" aria-label="Calculator keys">
+      <button data-act="clear" aria-label="clear">C</button>
+      <button data-act="backspace" aria-label="backspace">⌫</button>
+      <button data-val="(" aria-label="left parenthesis">(</button>
+      <button data-val=")" aria-label="right parenthesis">)</button>
+
+      <button data-val="7">7</button>
+      <button data-val="8">8</button>
+      <button data-val="9">9</button>
+      <button data-val="/" aria-label="divide">/</button>
+
+      <button data-val="4">4</button>
+      <button data-val="5">5</button>
+      <button data-val="6">6</button>
+      <button data-val="*" aria-label="multiply">*</button>
+
+      <button data-val="1">1</button>
+      <button data-val="2">2</button>
+      <button data-val="3">3</button>
+      <button data-val="-" aria-label="minus">-</button>
+
+      <button data-val="0" class="wide">0</button>
+      <button data-val="." aria-label="dot">.</button>
+      <button data-val="+" aria-label="plus">+</button>
+      <button data-act="equals" id="equals" aria-label="equals">=</button>
+    </div>
+    <div class="hint">Enter = 等于 · Backspace = 退格 · Esc = 清空</div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

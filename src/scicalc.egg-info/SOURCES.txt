@@ -1,0 +1,13 @@
+README.md
+pyproject.toml
+src/scicalc/__init__.py
+src/scicalc/__main__.py
+src/scicalc/core.py
+src/scicalc/web.py
+src/scicalc.egg-info/PKG-INFO
+src/scicalc.egg-info/SOURCES.txt
+src/scicalc.egg-info/dependency_links.txt
+src/scicalc.egg-info/entry_points.txt
+src/scicalc.egg-info/top_level.txt
+tests/test_core.py
+tests/test_web.py

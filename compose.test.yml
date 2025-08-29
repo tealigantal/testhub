@@ -21,6 +21,10 @@ services:
   app:
     build: .
     image: scicalc:test
+
+    ports:
+      - "8000:8000"
+
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
       REDIS_URL: redis://redis:6379/0

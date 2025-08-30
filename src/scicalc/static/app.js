@@ -29,18 +29,20 @@ async function evaluateExpr() {
   }
 }
 
+const actions = { backspace, clear: clearAll, equals: evaluateExpr };
+
 keys.addEventListener("click", (e) => {
-  const t = e.target.closest("button"); if (!t) return;
-  const val = t.dataset.val, act = t.dataset.act;
-  if (val) return append(val);
-  if (act === "backspace") return backspace();
-  if (act === "clear") return clearAll();
-  if (act === "equals") return evaluateExpr();
+  const t = e.target.closest("button");
+  if (!t) return;
+  if (t.dataset.val) return append(t.dataset.val);
+  const fn = actions[t.dataset.act];
+  if (fn) fn();
 });
+
+const keyActions = { Enter: evaluateExpr, Backspace: backspace, Escape: clearAll };
 
 document.addEventListener("keydown", (e) => {
   if (/[0-9+\-*/().]/.test(e.key)) { append(e.key); return; }
-  if (e.key === "Enter") { e.preventDefault(); evaluateExpr(); }
-  if (e.key === "Backspace") { e.preventDefault(); backspace(); }
-  if (e.key === "Escape") { e.preventDefault(); clearAll(); }
+  const fn = keyActions[e.key];
+  if (fn) { e.preventDefault(); fn(); }
 });

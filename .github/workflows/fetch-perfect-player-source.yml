@@ -21,7 +21,14 @@ jobs:
           curl -L --fail --retry 3 -A "$UA" \
             'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1783761934042/index.html?night=0&t=1783767087642' \
             -o out/index.html
-          grep -Eo 'https://[^"'"' ]+\.(js|json|png|jpg|webp)' out/__ai_app.html | sort -u > out/remote-assets.txt || true
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          s=Path('out/__ai_app.html').read_text(encoding='utf-8')
+          urls=sorted(set(re.findall(r'https://[^\"\'<> ]+\.(?:js|json|png|jpg|jpeg|webp)',s)))
+          Path('out/remote-assets.txt').write_text('\n'.join(urls),encoding='utf-8')
+          print('\n'.join(urls[:200]))
+          PY
           wc -c out/*
       - name: Upload source
         uses: actions/upload-artifact@v4

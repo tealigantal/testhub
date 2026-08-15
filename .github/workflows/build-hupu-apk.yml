@@ -6,6 +6,9 @@ on:
       - chatgpt-hupu-apk
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,9 +38,20 @@ jobs:
       - name: Build APK
         run: gradle -p android-hupu-wrapper assembleDebug --stacktrace
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: hupu-game-apk
           path: android-hupu-wrapper/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Publish APK release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android-hupu-wrapper/app/build/outputs/apk/debug/app-debug.apk Hupu-Basketball-Original.apk
+          gh release delete hupu-game-v1 --yes --cleanup-tag || true
+          gh release create hupu-game-v1 Hupu-Basketball-Original.apk \
+            --target "$GITHUB_SHA" \
+            --title "Hupu Basketball Android v1" \
+            --notes "Android wrapper for the original Hupu activity-project-ai-1784970502666 game page. Requires internet access."

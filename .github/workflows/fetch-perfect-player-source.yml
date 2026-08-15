@@ -1,0 +1,31 @@
+name: Fetch Perfect Player Source
+
+on:
+  push:
+    branches:
+      - chatgpt-hupu-apk
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch exact H5 page
+        run: |
+          set -euxo pipefail
+          mkdir -p out
+          UA='Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36'
+          curl -L --fail --retry 3 -A "$UA" \
+            'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1783761934042/__ai_app.html' \
+            -o out/__ai_app.html
+          curl -L --fail --retry 3 -A "$UA" \
+            'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1783761934042/index.html?night=0&t=1783767087642' \
+            -o out/index.html
+          grep -Eo 'https://[^"'"' ]+\.(js|json|png|jpg|webp)' out/__ai_app.html | sort -u > out/remote-assets.txt || true
+          wc -c out/*
+      - name: Upload source
+        uses: actions/upload-artifact@v4
+        with:
+          name: perfect-player-source
+          path: out
+          if-no-files-found: error

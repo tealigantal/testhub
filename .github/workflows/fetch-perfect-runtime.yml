@@ -1,0 +1,39 @@
+name: Fetch Perfect Player Runtime
+
+on:
+  push:
+    branches:
+      - chatgpt-hupu-apk
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch runtime scripts
+        run: |
+          set -euxo pipefail
+          mkdir -p out
+          UA='Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36'
+          urls=(
+            'https://activity-static.hoopchina.com.cn/files/2678-58zyeprc-upload-1783508428855-12.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-5hu3djrc-upload-1783494754597-12.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-gd4jvxrc-upload-1783494754597-15.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-456sfprc-upload-1783494754597-18.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-mdo4zerc-upload-1783494754597-21.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-qlg35lrc-upload-1783494754597-24.js'
+            'https://activity-static.hoopchina.com.cn/files/26630-uq56cnrc-upload-1782786826635-12.js'
+            'https://activity-static.hoopchina.com.cn/files/26716-pz0d55rc-upload-1784184998973-30.js'
+          )
+          i=1
+          for u in "${urls[@]}"; do
+            curl -L --fail --retry 3 -A "$UA" "$u" -o "out/$i.js"
+            i=$((i+1))
+          done
+          wc -c out/*
+      - name: Upload runtime
+        uses: actions/upload-artifact@v4
+        with:
+          name: perfect-player-runtime
+          path: out
+          if-no-files-found: error

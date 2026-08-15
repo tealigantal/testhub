@@ -53,7 +53,111 @@ jobs:
           curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26721-htvdrrrc-upload-1784631261470-12.js' -o "$ASSETS/assets/data-5.js"
 
           python3 tools/patch_hupu_unlimited.py /tmp/hupu-game.html "$ASSETS"
+
+          # Independent-build convenience feature: random OR directly choose a team-season.
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('android-hupu-wrapper/app/src/main/assets/index.html')
+          s=p.read_text(encoding='utf-8')
+
+          # A second button beside Random.
+          old='<button class="btn" id="spinBtn">随机</button>\n      <button class="btn ghost" id="respinBtn" style="display:none">重新随机 · 免费∞</button>'
+          new='<button class="btn" id="spinBtn">随机球队</button>\n      <button class="btn ghost" id="directPickBtn" onclick="openDirectPick()">选择球队</button>\n      <button class="btn ghost" id="respinBtn" style="display:none">重新随机 · 免费∞</button>'
+          if old not in s:
+              raise RuntimeError('spin-row changed upstream')
+          s=s.replace(old,new,1)
+
+          # Native-looking selects inside the existing modal system.
+          s=s.replace('</style>', '''
+          .direct-select{width:100%;padding:13px 12px;margin:0 0 10px;border:1px solid var(--hp-border);border-radius:10px;background:var(--hp-bg);color:var(--hp-text);font-size:15px;outline:none}
+          .direct-hint{font-size:12px;color:var(--hp-text2);line-height:1.5;margin:-4px 0 14px}
+          </style>''',1)
+
+          marker='function spin(){'
+          direct_js=r'''
+          function directSelectableGroups(){
+            return GROUPS.filter(g=>!usedKeys.has(g.key)&&!(targetTeam&&g.abbr===targetTeam.abbr&&g.sy===targetTeam.sy)&&groupHasUnpicked(g));
+          }
+          function refreshDirectSeasonOptions(){
+            const teamSel=$("directTeamSelect"),seasonSel=$("directSeasonSelect");
+            if(!teamSel||!seasonSel)return;
+            const abbr=teamSel.value;
+            const seasons=directSelectableGroups().filter(g=>g.abbr===abbr).map(g=>g.sy).sort((a,b)=>b-a);
+            seasonSel.innerHTML=seasons.map(sy=>'<option value="'+sy+'">'+formatSeasonYear(sy)+'</option>').join('');
+          }
+          function refreshDirectTeamOptions(){
+            const teamSel=$("directTeamSelect");if(!teamSel)return;
+            const old=teamSel.value;
+            const pool=directSelectableGroups();
+            const abbrs=[...new Set(pool.map(g=>g.abbr))].sort((a,b)=>(NBA_FRANCHISES[a]||a).localeCompare(NBA_FRANCHISES[b]||b,'zh-CN'));
+            teamSel.innerHTML=abbrs.map(a=>'<option value="'+a+'">'+escapeHtml(NBA_FRANCHISES[a]||a)+'</option>').join('');
+            if(abbrs.includes(old))teamSel.value=old;
+            refreshDirectSeasonOptions();
+          }
+          function openDirectPick(){
+            if(spinning)return;
+            if(rosterCount()>=SLOTS){showResults();return;}
+            const ov=$("directPickOverlay");if(!ov)return;
+            refreshDirectTeamOptions();
+            if(!$("directTeamSelect").options.length){showToast('没有更多可选择的球队赛季');return;}
+            ov.classList.remove('hidden');
+          }
+          function closeDirectPick(){const ov=$("directPickOverlay");if(ov)ov.classList.add('hidden');}
+          function confirmDirectPick(){
+            const teamSel=$("directTeamSelect"),seasonSel=$("directSeasonSelect");
+            if(!teamSel||!seasonSel||!teamSel.value||!seasonSel.value)return;
+            const key=teamSel.value+'|'+(+seasonSel.value),g=GROUP_BY_KEY[key];
+            if(!g||usedKeys.has(key)||(targetTeam&&g.abbr===targetTeam.abbr&&g.sy===targetTeam.sy)){
+              showToast('这个球队赛季当前不可选');refreshDirectTeamOptions();return;
+            }
+            closeDirectPick();
+            if(currentGroup){usedKeys.add(currentGroup.key);currentGroup=null;}
+            $("landed").classList.add('hidden');$("respinBtn").style.display='none';
+            currentGroup=g;usedKeys.add(g.key);spinning=false;
+            const m=resolveGroupMeta(g),track=$("reelTrack");
+            track.style.transition='none';track.style.transform='translateX(0)';
+            track.innerHTML='<div class="reel-tile" style="margin:0 auto">'+logoImg(m.short)+'<small>'+escapeHtml(m.name)+" '"+String(g.sy).slice(-2)+'</small></div>';
+            renderLanded(g);
+          }
+
+          '''
+          if marker not in s:
+              raise RuntimeError('spin function marker missing')
+          s=s.replace(marker,direct_js+marker,1)
+
+          # Restore the selector on each new game and hide it after five signings.
+          s=s.replace('$("spinBtn").textContent="随机";', '$("spinBtn").textContent="随机球队";if($("directPickBtn"))$("directPickBtn").style.display="";')
+          full='if(rosterCount()>=SLOTS){$("reelHint").textContent="阵容完成 — 拖动调整位置，点击模拟赛季";'
+          if full not in s:
+              raise RuntimeError('roster-complete block changed upstream')
+          s=s.replace(full,'if(rosterCount()>=SLOTS){if($("directPickBtn"))$("directPickBtn").style.display="none";$("reelHint").textContent="阵容完成 — 拖动调整位置，点击模拟赛季";',1)
+
+          overlay=r'''
+          <div id="directPickOverlay" class="outside-overlay hidden" onclick="if(event.target===this)closeDirectPick()">
+            <div class="outside-modal">
+              <div class="respin-choice-title">直接选择球队-赛季</div>
+              <select id="directTeamSelect" class="direct-select" onchange="refreshDirectSeasonOptions()"></select>
+              <select id="directSeasonSelect" class="direct-select"></select>
+              <div class="direct-hint">选择后直接进入该球队该赛季的球员列表。已用过的球队-赛季不会重复出现。</div>
+              <div class="respin-choice-actions">
+                <button class="btn" onclick="confirmDirectPick()">选择</button>
+                <button class="btn ghost" onclick="closeDirectPick()">取消</button>
+              </div>
+            </div>
+          </div>
+          '''
+          if '</body>' not in s:
+              raise RuntimeError('body end missing')
+          s=s.replace('</body>',overlay+'\n</body>',1)
+
+          if '选择球队' not in s or 'function confirmDirectPick()' not in s:
+              raise RuntimeError('direct selector patch missing')
+          p.write_text(s,encoding='utf-8')
+          PY
+
           grep -q '重新随机 · 免费∞' "$ASSETS/index.html"
+          grep -q '选择球队' "$ASSETS/index.html"
+          grep -q 'function confirmDirectPick()' "$ASSETS/index.html"
           grep -q 'file:///android_asset/index.html' android-hupu-wrapper/app/src/main/java/com/tealigantal/hupugame/MainActivity.java
           ! grep -q 'android.permission.INTERNET' android-hupu-wrapper/app/src/main/AndroidManifest.xml
           if grep -E '<script[^>]+src="https://' "$ASSETS/index.html"; then
@@ -68,23 +172,23 @@ jobs:
 
       - name: Prepare release APK
         run: |
-          cp android-hupu-wrapper/app/build/outputs/apk/debug/app-debug.apk Challenge-Legend-Unlimited.apk
-          sha256sum Challenge-Legend-Unlimited.apk
-          ls -lh Challenge-Legend-Unlimited.apk
+          cp android-hupu-wrapper/app/build/outputs/apk/debug/app-debug.apk Challenge-Legend-Unlimited-Select.apk
+          sha256sum Challenge-Legend-Unlimited-Select.apk
+          ls -lh Challenge-Legend-Unlimited-Select.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: challenge-legend-unlimited-apk
-          path: Challenge-Legend-Unlimited.apk
+          name: challenge-legend-unlimited-select-apk
+          path: Challenge-Legend-Unlimited-Select.apk
           if-no-files-found: error
 
       - name: Publish APK release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete challenge-legend-unlimited-v1 --yes --cleanup-tag || true
-          gh release create challenge-legend-unlimited-v1 Challenge-Legend-Unlimited.apk \
+          gh release delete challenge-legend-unlimited-v2 --yes --cleanup-tag || true
+          gh release create challenge-legend-unlimited-v2 Challenge-Legend-Unlimited-Select.apk \
             --target "$GITHUB_SHA" \
-            --title "挑战传奇 · 无限刷新 v1" \
-            --notes "独立 Android 版。核心游戏与球员/赛季数据均打包在 APK 内；重新随机永久免费且无限次数；无广告；无网络权限。"
+            --title "挑战传奇 · 无限刷新 + 自选球队 v2" \
+            --notes "独立 Android 版。支持随机球队，也支持直接选择球队和赛季；重新随机永久免费且无限次数；核心球员/赛季数据内置；无广告；无网络权限。"

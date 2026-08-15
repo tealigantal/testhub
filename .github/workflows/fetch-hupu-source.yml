@@ -10,21 +10,31 @@ jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch exact H5 pages
+      - name: Fetch exact H5 pages and runtime data
         run: |
-          mkdir -p out
-          curl -L --fail --retry 3 \
-            -A 'Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36' \
+          set -euxo pipefail
+          UA='Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36'
+          mkdir -p out/assets
+          curl -L --fail --retry 3 -A "$UA" \
             'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1784970502666/__ai_app.html' \
             -o out/__ai_app.html
-          curl -L --fail --retry 3 \
-            -A 'Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36' \
+          curl -L --fail --retry 3 -A "$UA" \
             'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1784970502666/index.html?t=1786677845569&night=0' \
             -o out/index.html
+
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26727-wbtxxnrc-upload-1785124598386-52.js' -o out/assets/data-1.js
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26721-9gnnmcrc-upload-1784627950810-12.js' -o out/assets/data-2.js
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26721-0njiyprc-upload-1784627950810-27.js' -o out/assets/data-3.js
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26723-ds5k1jrc-upload-1784794258625-12.js' -o out/assets/data-4.js
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26721-htvdrrrc-upload-1784631261470-12.js' -o out/assets/data-5.js
+          curl -L --fail --retry 3 -A "$UA" 'https://i3.hoopchina.com.cn/newsPost/de00f9a83014c2b3196d831d4be1adb9_w_300_h_300_.png' -o out/assets/hupu-logo.png || true
+
           echo '--- sizes ---'
-          wc -c out/*
-          echo '--- title / keywords ---'
-          grep -Eio '<title>[^<]+|重抽|刷新|广告|OVR|传奇模式|现役模式|征服联盟|打造我的传奇球星' out/__ai_app.html | head -100 || true
+          wc -c out/__ai_app.html out/assets/*
+          echo '--- exact game title ---'
+          grep -o '<title>[^<]*' out/__ai_app.html | head -1 || true
+          echo '--- respin logic ---'
+          grep -n -E 'reSpinCurrentTeam|doFreeRespin|doPaidRespin|runAdRespin|RESPIN_COST|respinFreeAvailable' out/__ai_app.html | head -30 || true
       - name: Upload source
         uses: actions/upload-artifact@v4
         with:

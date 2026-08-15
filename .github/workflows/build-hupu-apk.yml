@@ -1,4 +1,4 @@
-name: Build Hupu Game APK
+name: Build Challenge Legend Unlimited APK
 
 on:
   push:
@@ -35,23 +35,56 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Prepare standalone game assets
+        run: |
+          set -euxo pipefail
+          UA='Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36'
+          ASSETS='android-hupu-wrapper/app/src/main/assets'
+          rm -rf "$ASSETS"
+          mkdir -p "$ASSETS/assets"
+
+          curl -L --fail --retry 3 -A "$UA" \
+            'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1784970502666/__ai_app.html' \
+            -o /tmp/hupu-game.html
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26727-wbtxxnrc-upload-1785124598386-52.js' -o "$ASSETS/assets/data-1.js"
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26721-9gnnmcrc-upload-1784627950810-12.js' -o "$ASSETS/assets/data-2.js"
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26721-0njiyprc-upload-1784627950810-27.js' -o "$ASSETS/assets/data-3.js"
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26723-ds5k1jrc-upload-1784794258625-12.js' -o "$ASSETS/assets/data-4.js"
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hoopchina.com.cn/files/26721-htvdrrrc-upload-1784631261470-12.js' -o "$ASSETS/assets/data-5.js"
+
+          python3 tools/patch_hupu_unlimited.py /tmp/hupu-game.html "$ASSETS"
+          grep -q '重新随机 · 免费∞' "$ASSETS/index.html"
+          grep -q 'file:///android_asset/index.html' android-hupu-wrapper/app/src/main/java/com/tealigantal/hupugame/MainActivity.java
+          ! grep -q 'android.permission.INTERNET' android-hupu-wrapper/app/src/main/AndroidManifest.xml
+          if grep -E '<script[^>]+src="https://' "$ASSETS/index.html"; then
+            echo 'Remote executable script remains in standalone game' >&2
+            exit 1
+          fi
+          echo 'Standalone asset size:'
+          du -sh "$ASSETS"
+
       - name: Build APK
         run: gradle -p android-hupu-wrapper assembleDebug --stacktrace
+
+      - name: Prepare release APK
+        run: |
+          cp android-hupu-wrapper/app/build/outputs/apk/debug/app-debug.apk Challenge-Legend-Unlimited.apk
+          sha256sum Challenge-Legend-Unlimited.apk
+          ls -lh Challenge-Legend-Unlimited.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hupu-game-apk
-          path: android-hupu-wrapper/app/build/outputs/apk/debug/app-debug.apk
+          name: challenge-legend-unlimited-apk
+          path: Challenge-Legend-Unlimited.apk
           if-no-files-found: error
 
       - name: Publish APK release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cp android-hupu-wrapper/app/build/outputs/apk/debug/app-debug.apk Hupu-Basketball-Original.apk
-          gh release delete hupu-game-v1 --yes --cleanup-tag || true
-          gh release create hupu-game-v1 Hupu-Basketball-Original.apk \
+          gh release delete challenge-legend-unlimited-v1 --yes --cleanup-tag || true
+          gh release create challenge-legend-unlimited-v1 Challenge-Legend-Unlimited.apk \
             --target "$GITHUB_SHA" \
-            --title "Hupu Basketball Android v1" \
-            --notes "Android wrapper for the original Hupu activity-project-ai-1784970502666 game page. Requires internet access."
+            --title "挑战传奇 · 无限刷新 v1" \
+            --notes "独立 Android 版。核心游戏与球员/赛季数据均打包在 APK 内；重新随机永久免费且无限次数；无广告；无网络权限。"

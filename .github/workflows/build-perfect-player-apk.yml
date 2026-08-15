@@ -1,0 +1,105 @@
+name: Build Perfect Player Unlimited APK
+
+on:
+  push:
+    branches:
+      - chatgpt-perfect-player-apk
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Prepare independent perfect-player assets
+        run: |
+          set -euxo pipefail
+          UA='Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36'
+          ASSETS='perfect-player-android/app/src/main/assets'
+          rm -rf "$ASSETS"
+          mkdir -p "$ASSETS/assets"
+
+          curl -L --fail --retry 3 -A "$UA" \
+            'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1783761934042/__ai_app.html' \
+            -o /tmp/perfect-player.html
+
+          urls=(
+            'https://activity-static.hoopchina.com.cn/files/2678-58zyeprc-upload-1783508428855-12.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-5hu3djrc-upload-1783494754597-12.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-gd4jvxrc-upload-1783494754597-15.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-456sfprc-upload-1783494754597-18.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-mdo4zerc-upload-1783494754597-21.js'
+            'https://activity-static.hoopchina.com.cn/files/2678-qlg35lrc-upload-1783494754597-24.js'
+            'https://activity-static.hoopchina.com.cn/files/26630-uq56cnrc-upload-1782786826635-12.js'
+            'https://activity-static.hoopchina.com.cn/files/26716-pz0d55rc-upload-1784184998973-30.js'
+          )
+          for i in "${!urls[@]}"; do
+            n=$((i+1))
+            curl -L --fail --retry 3 -A "$UA" "${urls[$i]}" -o "$ASSETS/assets/data-$n.js"
+          done
+
+          python3 tools/patch_perfect_player_unlimited.py /tmp/perfect-player.html "$ASSETS"
+
+          grep -q '更换球员 · 免费∞' "$ASSETS/index.html"
+          grep -q '选择球员所属球队 · 30队任选' "$ASSETS/index.html"
+          grep -q '选择生涯球队 · 30队任选' "$ASSETS/index.html"
+          ! grep -q '看广告换球员' "$ASSETS/index.html"
+          ! grep -q '看视频自选球队' "$ASSETS/index.html"
+          grep -q "applicationId 'com.tealigantal.perfectplayerunlimited'" perfect-player-android/app/build.gradle
+          ! grep -q "applicationId 'com.tealigantal.hupugame'" perfect-player-android/app/build.gradle
+          grep -q 'file:///android_asset/index.html' perfect-player-android/app/src/main/java/com/tealigantal/perfectplayerunlimited/MainActivity.java
+          if grep -E '<script[^>]+src="https://' "$ASSETS/index.html"; then
+            echo 'Remote executable script remains' >&2
+            exit 1
+          fi
+          du -sh "$ASSETS"
+
+      - name: Build APK
+        run: gradle -p perfect-player-android assembleDebug --stacktrace
+
+      - name: Prepare release APK
+        run: |
+          cp perfect-player-android/app/build/outputs/apk/debug/app-debug.apk Perfect-Player-Unlimited.apk
+          sha256sum Perfect-Player-Unlimited.apk
+          ls -lh Perfect-Player-Unlimited.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: perfect-player-unlimited-apk
+          path: Perfect-Player-Unlimited.apk
+          if-no-files-found: error
+
+      - name: Publish APK release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete perfect-player-unlimited-v1 --yes --cleanup-tag || true
+          gh release create perfect-player-unlimited-v1 Perfect-Player-Unlimited.apk \
+            --target "$GITHUB_SHA" \
+            --title "完美球员 · 选球队 + 无限重选 v1" \
+            --notes "独立 Android App，包名 com.tealigantal.perfectplayerunlimited，不覆盖挑战传奇。建球员阶段可随机或直接选择30支球队；当前球队球员可免费无限重选；生涯球队30队直接任选；广告限制已移除。"

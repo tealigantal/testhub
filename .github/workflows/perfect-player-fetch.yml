@@ -1,0 +1,32 @@
+name: Fetch Perfect Player H5
+
+on:
+  push:
+    branches:
+      - chatgpt-perfect-player-apk
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch source
+        run: |
+          set -euxo pipefail
+          mkdir -p out
+          UA='Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36'
+          curl -L --fail --retry 3 -A "$UA" \
+            'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1783761934042/__ai_app.html' \
+            -o out/__ai_app.html
+          echo '--- size ---'
+          wc -c out/__ai_app.html
+          echo '--- scripts ---'
+          grep -oE '<script[^>]+src="[^"]+' out/__ai_app.html | head -100 || true
+          echo '--- relevant keywords ---'
+          grep -nE '随机|重选|重抽|球队|生涯球队|reroll|respin|spin|career|team' out/__ai_app.html | head -250 || true
+      - name: Upload source
+        uses: actions/upload-artifact@v4
+        with:
+          name: perfect-player-source
+          path: out
+          if-no-files-found: error

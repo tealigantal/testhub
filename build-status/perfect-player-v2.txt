@@ -1,5 +1,4 @@
-status=success
-run_id=32606272951
+status=running
+run_id=32606361763
 release=https://github.com/tealigantal/testhub/releases/download/perfect-player-free-v2/Perfect-Player-OneClick.apk
-apk_sha256=85e9fafe90a2521e303ecf8f5fb00037c400ce39e67fa369c6054d2be05a64f7
-source_commit=cb8f7eb487e6ec7e995d88e7c1cf0047af0f59a7
+source_commit=888f0eb89945c72e61fcb6bc8e223b2e8587ba17

@@ -1,2 +1,4 @@
-status=pending
+status=running
+run_id=32606407713
 release=https://github.com/tealigantal/testhub/releases/download/perfect-player-free-v3/Perfect-Player-AllMode-OneClick.apk
+source_commit=7509f7309aeac8c0b54e871a58a633fad367f851

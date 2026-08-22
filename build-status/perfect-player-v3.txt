@@ -1,0 +1,2 @@
+status=pending
+release=https://github.com/tealigantal/testhub/releases/download/perfect-player-free-v3/Perfect-Player-AllMode-OneClick.apk

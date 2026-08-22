@@ -1,0 +1,2 @@
+status=pending
+release=https://github.com/tealigantal/testhub/releases/download/perfect-player-free-v2/Perfect-Player-OneClick.apk

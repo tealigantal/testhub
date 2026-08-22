@@ -1,0 +1,61 @@
+name: Inspect Perfect Player Legend
+
+on:
+  push:
+    branches:
+      - chatgpt-hupu-apk
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch and inspect latest H5
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          UA='Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/138 Mobile Safari/537.36'
+          curl -L --fail --retry 3 -A "$UA" 'https://activity-static.hupu.com/colorbox-activities/activity-project-ai-1783761934042/__ai_app.html' -o /tmp/perfect.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('/tmp/perfect.html').read_text(encoding='utf-8',errors='replace')
+          out=[]
+          out.append('SIZE='+str(len(s)))
+          pats=[
+            r'传奇模式', r"mode\s*[:=]\s*['\"]legend['\"]", r"STATE\.mode[^\n]{0,120}",
+            r'LEGEND[A-Za-z0-9_]*', r'[A-Za-z0-9_]*LEGEND[A-Za-z0-9_]*',
+            r'legend[A-Za-z0-9_]*', r'[A-Za-z0-9_]*legend[A-Za-z0-9_]*',
+            r'NBA2K_[A-Za-z0-9_]+', r'[A-Za-z0-9_]+_DATA', r'[A-Za-z0-9_]+_TEAMS'
+          ]
+          seen=set()
+          for pat in pats:
+            for m in re.finditer(pat,s,re.I):
+              a=max(0,m.start()-500); b=min(len(s),m.end()+900)
+              chunk=s[a:b].replace('\r','')
+              key=chunk[:200]
+              if key in seen: continue
+              seen.add(key)
+              out.append('\n--- MATCH '+pat+' @ '+str(m.start())+' ---\n'+chunk)
+              if len(out)>120: break
+            if len(out)>120: break
+          # Script URLs and variable declarations mentioning legend/current/player pool
+          urls=sorted(set(re.findall(r'https://[^\"\'<> ]+?\.js(?:\?[^\"\'<> ]*)?',s)))
+          out.append('\n--- JS URLS ---\n'+'\n'.join(urls))
+          for name in ['renderModeSelect','startGame','renderPositionSelect','spinTeam','renderRosterPlayers','pickPlayer','getPlayerMainPos','getPosPenalty','calcOVR']:
+            idx=s.find('function '+name)
+            if idx>=0: out.append('\n--- FUNCTION '+name+' ---\n'+s[idx:idx+5000])
+          Path('/tmp/inspect.txt').write_text('\n'.join(out)[:900000],encoding='utf-8')
+          PY
+          FILE='debug/perfect-legend-inspect.txt'
+          BODY=$(base64 -w0 /tmp/inspect.txt)
+          OLD_SHA=$(gh api "repos/$GITHUB_REPOSITORY/contents/$FILE?ref=$GITHUB_REF_NAME" --jq '.sha' 2>/dev/null || true)
+          if [ -n "$OLD_SHA" ]; then
+            gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Inspect latest Perfect Player legend mode' -f content="$BODY" -f sha="$OLD_SHA" -f branch="$GITHUB_REF_NAME" >/dev/null
+          else
+            gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Inspect latest Perfect Player legend mode' -f content="$BODY" -f branch="$GITHUB_REF_NAME" >/dev/null
+          fi

@@ -1,0 +1,1763 @@
+SIZE=5138318
+LINES=36314
+
+--- RELEVANT LINES ---
+1455: /* inlined from ./legend_era_deps/hupu-player-photos.js */
+1556:   if (typeof NBA2K_TEAMS !== 'undefined' && typeof NBA2K_DATA !== 'undefined') {
+1557:     NBA2K_TEAMS.forEach(function(t) {
+1558:       (NBA2K_DATA[t] || []).forEach(function(p) {
+1566: <!-- 传奇模式：历史时代依赖（无工资/无商店版） -->
+1568: /* inlined from ./legend_era_deps/draft-classes.js */
+3480: /* inlined from ./legend_era_deps/historical-players.js */
+4876: /* inlined from ./legend_era_deps/era-config.js */
+5032: /* inlined from ./legend_era_deps/team-logos.js */
+5508:   mode: null,           // 'current' | 'legend'
+5585:   if (STATE && STATE.mode === 'legend' && STATE.draftMode === 'historical' && STATE.eraStart) {
+5635:   STATE.mode = mode === 'legend' ? 'legend' : 'current';
+5636:   if (STATE.mode === 'legend') {
+5653:   if (!NBA2K_DATA || typeof NBA2K_TEAMS === 'undefined') return;
+5654:   NBA2K_TEAMS.forEach(function(t) {
+5655:     (NBA2K_DATA[t] || []).forEach(function(p) {
+5667: var LEGEND_ERA_STATIC_FILES = {
+5672: var _legendEraStaticLoadPromises = {};
+5675:   return !!LEGEND_ERA_STATIC_FILES[String(era || '')];
+5681:   if (window.LEGEND_ERA_STATIC_PACKS && window.LEGEND_ERA_STATIC_PACKS[era]) return window.LEGEND_ERA_STATIC_PACKS[era];
+5682:   if (era === '1984') return window.LEGEND_ERA_1984_STATIC || null;
+5683:   if (era === '1996') return window.LEGEND_ERA_1996_STATIC || null;
+5684:   if (era === '2003') return window.LEGEND_ERA_2003_STATIC || null;
+5691:   var src = LEGEND_ERA_STATIC_FILES[era];
+5693:   if (_legendEraStaticLoadPromises[era]) return _legendEraStaticLoadPromises[era];
+5694:   _legendEraStaticLoadPromises[era] = new Promise(function(resolve, reject) {
+5698:     script.dataset.legendEraStatic = era;
+5705:       delete _legendEraStaticLoadPromises[era];
+5706:       reject(new Error('Failed to load legend era static file: ' + src));
+5710:   return _legendEraStaticLoadPromises[era];
+5744:   STATE._legendScheduleKey = String(era) + ':' + sc;
+5752:   if (typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return false;
+5753:   NBA2K_TEAMS.forEach(function(t) {
+5755:     NBA2K_DATA[t] = cloneLeagueData(roster);
+5757:   NBA2K_DATA._eraRostersBuilt = true;
+5770:     if (!(STATE.mode === 'legend' && STATE._legendRosterBuildKey === String(STATE.eraStart || loadEraStart() || '2003'))) {
+5774:   if (STATE.mode !== 'legend') {
+5777:     STATE._legendRosterBuildKey = null;
+5778:     STATE._legendScheduleKey = null;
+5787:   if (STATE._legendRosterBuildKey !== rosterKey) {
+5789:       STATE._legendRosterBuildKey = rosterKey;
+5801:         STATE._legendScheduleKey = null;
+5809:     STATE._legendRosterBuildKey = rosterKey;
+5818:   if (STATE._legendScheduleKey === key && STATE._eraSchedule) return;
+5824:       STATE._legendScheduleKey = key;
+5913:   if (STATE.mode === 'legend') return 1.0 - (1.0 - normal) * 0.3;
+5977:   if (_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
+5979:   NBA2K_TEAMS.forEach(function(t) {
+5980:     _baseLeagueRosterSnapshot[t] = cloneLeagueData(NBA2K_DATA[t] || []);
+5986:   if (!_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
+5987:   NBA2K_TEAMS.forEach(function(t) {
+5988:     NBA2K_DATA[t] = cloneLeagueData(_baseLeagueRosterSnapshot[t] || []);
+5990:   delete NBA2K_DATA._draftClass2026Applied;
+6126:   var modal = document.getElementById('legend-era-modal');
+6128:   STATE._legendEraPanelOpen = false;
+6133:   STATE._legendEraPanelOpen = true;
+6139:   overlay.id = 'legend-era-modal';
+6173:   var modal = document.getElementById('legend-era-modal');
+6181:     setGameMode('legend', start);
+6200:   if (STATE._legendEraPanelOpen == null) STATE._legendEraPanelOpen = false;
+6213:       tag: 'LEGEND',
+6215:       title: '传奇模式',
+6218:       mode: 'legend',
+6227:     if ((c.mode === 'legend' && isLegendActive) || (c.mode === 'current' && !isLegendActive)) card.classList.add('selected');
+6246:         if (c.mode === 'legend') {
+6247:           STATE.mode = 'legend';
+6254:         STATE._legendEraPanelOpen = false;
+6268:   if (!STATE.mode) STATE.mode = STATE.draftMode === 'historical' ? 'legend' : 'current';
+6274:   if (STATE.mode === 'current' || STATE.mode === 'legend') {
+6277:     (NBA2K_DATA['MEM'] || []).forEach(function(p) {
+6282:     (NBA2K_DATA['BOS'] || []).forEach(function(p) {
+6439:   return (typeof NBA2K_TEAMS !== 'undefined' ? NBA2K_TEAMS.slice() : []);
+6642:   // 生涯=现役(NBA2K_DATA)，传奇=alltime(NBA2K_ALLTIME_DATA)
+6643:   var isLegend = STATE && (STATE.mode === 'legend' || STATE.draftMode === 'historical');
+6645:     var hist = (typeof NBA2K_ALLTIME_DATA !== 'undefined' && NBA2K_ALLTIME_DATA[team + '_HIST']) || [];
+6648:   return (typeof NBA2K_DATA !== 'undefined' && NBA2K_DATA && NBA2K_DATA[team]) || [];
+6868:   NBA2K_TEAMS.forEach(team => {
+6869:     (NBA2K_DATA[team] || []).forEach(player => {
+6893:   var teams = (typeof NBA2K_TEAMS !== 'undefined' ? NBA2K_TEAMS : []);
+6894:   var isLegend = STATE && (STATE.mode === 'legend' || STATE.draftMode === 'historical');
+6896:     var roster = (typeof NBA2K_ALLTIME_DATA !== 'undefined' && NBA2K_ALLTIME_DATA[t + '_HIST']) ||
+6897:                  (NBA2K_DATA && NBA2K_DATA[t]) || [];
+6898:     return { team: t, roster: isLegend ? roster : ((NBA2K_DATA && NBA2K_DATA[t]) || []) };
+7012:     const meta = NBA2K_ARCHETYPES ? NBA2K_ARCHETYPES[item.archetype] : null;
+7840:   const teamPlayers = NBA2K_DATA[team] || [];
+8064:   for (const team of NBA2K_TEAMS) {
+8065:     if (NBA2K_DATA[team] && NBA2K_DATA[team].includes(player)) return team;
+8073:   for (const team of NBA2K_TEAMS) {
+8074:     const players = NBA2K_DATA[team];
+8083:   if (typeof NBA2K_ALLTIME_DATA !== 'undefined') {
+8084:     for (const roster of Object.values(NBA2K_ALLTIME_DATA)) {
+8171:   return NBA2K_TEAMS.slice();
+8227:   return !(STATE && (STATE.mode === 'legend' || STATE.draftMode === 'historical'));
+8764:   for (var _ft = 0; _ft < NBA2K_TEAMS.length; _ft++) {
+8765:     var roster = (NBA2K_DATA && NBA2K_DATA[NBA2K_TEAMS[_ft]]) || [];
+8792:   for (var _dt = 0; _dt < NBA2K_TEAMS.length; _dt++) {
+8793:     if (!isTeamConferenceTop3(NBA2K_TEAMS[_dt])) continue;
+8794:     var roster = (NBA2K_DATA && NBA2K_DATA[NBA2K_TEAMS[_dt]]) || [];
+8800:       if (score > bestScore) { bestScore = score; best = p; bestTeam = NBA2K_TEAMS[_dt]; }
+8805:     for (var _dt2 = 0; _dt2 < NBA2K_TEAMS.length; _dt2++) {
+8806:       if (!isTeamConferenceTop3(NBA2K_TEAMS[_dt2])) continue;
+8807:       var roster2 = (NBA2K_DATA && NBA2K_DATA[NBA2K_TEAMS[_dt2]]) || [];
+8812:         if (score2 > bestScore) { bestScore = score2; best = p2; bestTeam = NBA2K_TEAMS[_dt2]; }
+8821:   for (var _st2 = 0; _st2 < NBA2K_TEAMS.length; _st2++) {
+8822:     var t2 = NBA2K_TEAMS[_st2];
+8859:   for (var _st = 0; _st < NBA2K_TEAMS.length; _st++) {
+8860:     var roster = (NBA2K_DATA && NBA2K_DATA[NBA2K_TEAMS[_st]]) || [];
+8886:     for (var _t = 0; _t < NBA2K_TEAMS.length; _t++) {
+8887:       var _r = NBA2K_DATA[NBA2K_TEAMS[_t]];
+8890:         if (_r[_p].name === name) return { team: NBA2K_TEAMS[_t], cname: _r[_p].cname || name, playerName: name };
+8898:     for (var _lt = 0; _lt < NBA2K_TEAMS.length; _lt++) {
+8899:       var code = NBA2K_TEAMS[_lt];
+8937:     for (var _ast = 0; _ast < NBA2K_TEAMS.length; _ast++) {
+8938:       var aTeam = NBA2K_TEAMS[_ast];
+8939:       var rosterA = NBA2K_DATA[aTeam] || [];
+8993:   for (var _mt = 0; _mt < NBA2K_TEAMS.length; _mt++) {
+8994:     var mTeam = NBA2K_TEAMS[_mt];
+8995:     var rosterM = NBA2K_DATA[mTeam] || [];
+9030:       var topRoster = (NBA2K_DATA[topTeam] || []).slice();
+9114:       for (var _ti = 0; _ti < NBA2K_TEAMS.length; _ti++) {
+9115:         var teamCode = NBA2K_TEAMS[_ti];
+9117:         var roster = NBA2K_DATA[teamCode] || [];
+9172:       var mvpRoster = (mvpPick.team && NBA2K_DATA[mvpPick.team]) || [];
+9281:     for (var _dt3 = 0; _dt3 < NBA2K_TEAMS.length; _dt3++) {
+9282:       var dTeam = NBA2K_TEAMS[_dt3];
+9283:       var dRoster = (NBA2K_DATA && NBA2K_DATA[dTeam]) || [];
+9405:     for (var _tt = 0; _tt < NBA2K_TEAMS.length; _tt++) {
+9406:       var tRoster = (NBA2K_DATA && NBA2K_DATA[NBA2K_TEAMS[_tt]]) || [];
+9411:         leagueCands.push({ name: tp.cname || tp.name, playerName: tp.name || '', team: NBA2K_TEAMS[_tt], ovr: tOvr, stats: estimateLeaguePlayerSeasonStats(tp) });
+9459:       if (typeof NBA2K_TEAMS !== 'undefined' && typeof NBA2K_DATA !== 'undefined') {
+9460:         for (var _rt = 0; _rt < NBA2K_TEAMS.length; _rt++) {
+9461:           var _rr = NBA2K_DATA[NBA2K_TEAMS[_rt]] || [];
+9464:               return { cname: _rr[_rp2].cname || cn || en, playerName: _rr[_rp2].name || _rr[_rp2].nameEN || en, team: NBA2K_TEAMS[_rt] };
+9622:     if (team && NBA2K_DATA && NBA2K_DATA[team]) {
+9623:       var roster = NBA2K_DATA[team] || [];
+9628:     if (typeof NBA2K_TEAMS !== 'undefined' && typeof NBA2K_DATA !== 'undefined') {
+9629:       for (var ti = 0; ti < NBA2K_TEAMS.length; ti++) {
+9630:         var t = NBA2K_TEAMS[ti];
+9631:         var rr = NBA2K_DATA[t] || [];
+9830:     : NBA2K_SCHEDULE[myTeam];
+9851:   const scheduleSource = (STATE && STATE.draftMode === 'historical' && STATE._eraSchedule) ? STATE._eraSchedule : NBA2K_SCHEDULE;
+9939:   const allPlayers = (NBA2K_DATA[team] || []).slice();
+10370:       if (lineup && lineup.isUserStarter && (STATE.mode === 'legend' || STATE.draftMode === 'historical')) {
+12695:   const roster = (typeof NBA2K_DATA !== 'undefined' && NBA2K_DATA[championTeam]) || [];
+13197:   var data = (typeof HISTORICAL_LEGACY_SCORE_DATA !== 'undefined' && Array.isArray(HISTORICAL_LEGACY_SCORE_DATA)) ? HISTORICAL_LEGACY_SCORE_DATA : [];
+13603:   var era = String(c && c.legendStory && c.legendStory.era || '');
+13608:   var era = String(c && c.legendStory && c.legendStory.era || STATE.eraStart || '2003');
+13613:   return (c && c.legendStory && c.legendStory.scores) || {};
+13715:   var history = (c.legendStory.history || []).slice(-3).reverse();
+13790:   var st = c.legendStory || {};
+14009:   c.legendStory = c.legendStory || {};
+14010:   var era = String(c.legendStory.era || STATE.eraStart || '2003');
+14011:   if (!c.retired || !c.legendStory.verdict || c.legendStory.verdict.version !== 1 || String(c.legendStory.verdict.era || '') !== era) {
+14012:     c.legendStory.verdict = buildLegendCareerVerdict();
+14014:   return c.legendStory.verdict || null;
+14378:   ATL:{ name:'Dominique Wilkins', nameCN:'威尔金斯', pts:23292, type:'legend' },
+14379:   BOS:{ name:'John Havlicek', nameCN:'哈夫利切克', pts:26395, type:'legend' },
+14382:   CHI:{ name:'Michael Jordan', nameCN:'乔丹', pts:29277, type:'legend' },
+14383:   CLE:{ name:'LeBron James', nameCN:'詹姆斯', pts:23119, type:'legend' },
+14384:   DAL:{ name:'Dirk Nowitzki', nameCN:'诺维茨基', pts:31560, type:'legend' },
+14385:   DEN:{ name:'Alex English', nameCN:'英格利什', pts:21645, type:'legend' },
+14386:   DET:{ name:'Isiah Thomas', nameCN:'以赛亚-托马斯', pts:18822, type:'legend' },
+14388:   HOU:{ name:'Hakeem Olajuwon', nameCN:'奥拉朱旺', pts:26511, type:'legend' },
+14389:   IND:{ name:'Reggie Miller', nameCN:'米勒', pts:25279, type:'legend' },
+14390:   LAC:{ name:'Randy Smith', nameCN:'兰迪-史密斯', pts:12735, type:'legend' },
+14391:   LAL:{ name:'Kobe Bryant', nameCN:'科比', pts:33643, type:'legend' },
+14393:   MIA:{ name:'Dwyane Wade', nameCN:'韦德', pts:21556, type:'legend' },
+14395:   MIN:{ name:'Kevin Garnett', nameCN:'加内特', pts:19201, type:'legend' },
+14397:   NYK:{ name:'Patrick Ewing', nameCN:'尤因', pts:23665, type:'legend' },
+14400:   PHI:{ name:'Hal Greer', nameCN:'哈尔-格里尔', pts:21586, type:'legend' },
+14401:   PHX:{ name:'Walter Davis', nameCN:'沃尔特-戴维斯', pts:15666, type:'legend' },
+14403:   SAC:{ name:'Oscar Robertson', nameCN:'奥斯卡-罗伯特森', pts:22009, type:'legend' },
+14404:   SAS:{ name:'Tim Duncan', nameCN:'邓肯', pts:26496, type:'legend' },
+14406:   UTA:{ name:'Karl Malone', nameCN:'马龙', pts:36374, type:'legend' },
+14407:   WAS:{ name:'Elvin Hayes', nameCN:'海耶斯', pts:15551, type:'legend' }
+14791:   legend: [
+14808:   var pool = RECORD_STORY_COPY[fr.type] || RECORD_STORY_COPY.legend;
+15376:   var legendForced = false;
+15377:   var legendForcedTopic = '';
+15383:   var legendPool = mainPool.filter(function(ev) {
+15384:     if (!ev.legendStory) return false;
+15389:   if (legendPool.length > 0) {
+15390:     var legendStep = pickBranchEvent(legendPool, true);
+15391:     if (legendStep) {
+15392:       queue.push(legendStep);
+15393:       markLegendStoryEvent(legendStep);
+15394:       legendForced = true;
+15395:       legendForcedTopic = getLegendStoryTopic(legendStep);
+15433:   var forcedMainCount = (relationshipForced ? 1 : 0) + (relationshipStepForced ? 1 : 0) + (crossoverStepForced ? 1 : 0) + (legendForced ? 1 : 0);
+15436:     if (legendForced && ev.legendStory) return false;
+15437:     if (legendForcedTopic === 'city' && ev.branch === 'city_culture') return false;
+15438:     if (legendForcedTopic === 'media' && ev.branch === 'media') return false;
+15439:     if (legendForcedTopic === 'team' && (ev.branch === 'team_practice' || ev.branch === 'teammate_bond')) return false;
+15550:   if (!STATE.career || !STATE.careerTeam || !NBA2K_DATA) return null;
+15551:   var roster = NBA2K_DATA[STATE.careerTeam] || [];
+15571:   NBA2K_TEAMS.forEach(function(team) {
+15573:     (NBA2K_DATA[team] || []).forEach(function(p) {
+15587:   if (STATE && STATE.mode === 'legend' && STATE.draftMode === 'historical' && STATE.eraStart) {
+15754:     phase: 'legend_overlay',
+15861:     if (id === 'legend_2003_class_arrival' || id === 'legend_2003_rookie_table') return '';
+15869:     if (hasLegendHistoryMatch(/legend_city_farewell|旧城告别|旧城/)) return '你离开过一座城市，但那段关系没有被交易流言完全带走。';
+15882:     if (hasLegendHistoryMatch(/legend_superstar_recruit_call[\s\S]*保持距离|保持距离/)) return '你让那通电话停在了夜里，也让某些对抗继续保留原来的形状。';
+15894:   var topic = (ev && ev.legendTopic) || '';
+16006:   if (!NBA2K_TEAMS || !NBA2K_DATA) return null;
+16008:   NBA2K_TEAMS.forEach(function(t) {
+16010:     var roster = NBA2K_DATA[t] || [];
+16132:   if (ev.legendStory && isLegendStoryEnabled()) {
+16156:   var packs = (typeof LEGEND_ERA_STORY_PACKS !== 'undefined') ? LEGEND_ERA_STORY_PACKS : {};
+16168:       id: 'legend_farewell_tour_question',
+16169:       branch: 'legend_career_closing',
+16173:       legendStory: true,
+16174:       legendTopic: 'legacy',
+16218:       legendStory: true,
+16219:       legendTopic: 'legacy',
+16253:       legendStory: true,
+16254:       legendTopic: 'legacy',
+16284:       legendStory: true,
+16285:       legendTopic: 'legacy',
+16339:       legendStory: true,
+16340:       legendTopic: 'legacy',
+16386: var LEGEND_DAG_ROUTES = [
+16482:   return LEGEND_DAG_ROUTES.filter(function(route) {
+16731:       id: 'legend_route_' + route.id,
+16733:       branch: 'legend_route_' + route.id,
+16735:       legendStory: true,
+16736:       legendRoute: true,
+16737:       legendTopic: route.topic || route.group || 'route',
+16752:   if (hasLegendStoryFlag('seen_legend_route_' + route.id)) return false;
+16777:     if (String(STATE.eraStart || '') === '2003' && !hasLegendStoryFlag('seen_legend_2003_front_office_window')) return false;
+17024:   c.legendStory = c.legendStory || { era: String(STATE.eraStart || '2003'), scores: {}, flags: {}, history: [] };
+17025:   c.legendStory.era = String(STATE.eraStart || c.legendStory.era || '2003');
+17026:   c.legendStory.scores = c.legendStory.scores || {};
+17027:   c.legendStory.flags = c.legendStory.flags || {};
+17028:   c.legendStory.history = c.legendStory.history || [];
+17029:   c.legendStory.topicCooldown = c.legendStory.topicCooldown || {};
+17036:     if (c.legendStory.scores[k] == null) c.legendStory.scores[k] = defaults[k];
+17038:   return c.legendStory;
+17064:   return (ev && ev.legendTopic) || 'main';
+17148:     if (!ev.legendStory || getEventPhases(ev).indexOf('season') < 0) return false;
+17158:     markSeasonStoryPopupTriggered('legend_season', picked.id);
+17860: const LEGEND_STORY_EVENTS = [
+17862:     id: 'legend_2003_class_arrival',
+17863:     branch: 'legend_story_2003',
+17865:     legendStory: true,
+17866:     legendTopic: 'class',
+17875:       return isLegendStoryEnabled() && getLegendStorySeasonNum() === 1 && (ctx.gamesPlayed || 0) >= 2 && !hasLegendStoryFlag('seen_legend_2003_class_arrival');
+17879:         setBranchNode('legend_story_2003', 'class_claimed', { era: '2003', identity: 'front_row' });
+17886:         setBranchNode('legend_story_2003', 'class_quiet', { era: '2003', identity: 'quiet_worker' });
+17895:     id: 'legend_2003_rookie_table',
+17896:     branch: 'legend_story_2003',
+17898:     legendStory: true,
+17899:     legendTopic: 'class',
+17908:       return isLegendStoryEnabled() && getLegendStorySeasonNum() === 1 && (ctx.gamesPlayed || 0) >= 18 && !hasLegendStoryFlag('seen_legend_2003_rookie_table');
+17912:         setBranchNode('legend_story_2003', 'ring_chase', { legacy: 'rings' });
+17919:         setBranchNode('legend_story_2003', 'complete_player', { legacy: 'complete' });
+17928:     id: 'legend_2003_roty_shadow',
+17929:     branch: 'legend_story_2003',
+17932:     legendStory: true,
+17933:     legendTopic: 'class',
+17943:         setBranchNode('legend_story_2003', 'sophomore_fire', { rookieResponse: 'fuel' });
+17950:         setBranchNode('legend_story_2003', 'class_respect', { rookieResponse: 'respect' });
+17958:     id: 'legend_2003_old_media_grind',
+17959:     branch: 'legend_story_2003',
+17962:     legendStory: true,
+17963:     legendTopic: 'media',
+17986:     id: 'legend_2003_franchise_claim',
+17987:     branch: 'legend_story_2003',
+17989:     legendStory: true,
+17990:     legendTopic: 'team',
+17997:     body: '你已经不只是新秀。球队开始试探你的上限，也试探你的耐心。接下来的选择会决定你在传奇模式中的球队身份。',
+17999:       return isLegendStoryEnabled() && getLegendStorySeasonNum() >= 2 && getLegendStorySeasonNum() <= 4 && (ctx.gamesPlayed || 0) >= 12 && !hasLegendStoryFlag('seen_legend_2003_franchise_claim') && ((STATE.finalOVR || 0) >= 80 || ((STATE.career.profile && STATE.career.profile.coachTrust) || 0) >= 6);
+18004:         setBranchNode('legend_story_2003', 'franchise_core', { teamRole: 'core' });
+18011:         setBranchNode('legend_story_2003', 'franchise_connector', { teamRole: 'connector' });
+18019:     id: 'legend_2003_next_wave',
+18020:     branch: 'legend_story_2003',
+18023:     legendStory: true,
+18024:     legendTopic: 'class',
+18034:         setBranchNode('legend_story_2003', 'guard_the_gate', { nextWave: 'pressure' });
+18041:         setBranchNode('legend_story_2003', 'era_builder', { nextWave: 'builder' });
+18049:     id: 'legend_2003_sophomore_wall',
+18050:     branch: 'legend_story_2003_class',
+18052:     legendStory: true,
+18053:     legendTopic: 'class',
+18062:       return isLegendStoryEnabled() && getLegendStorySeasonNum() === 2 && (ctx.gamesPlayed || 0) >= 10 && !hasLegendStoryFlag('seen_legend_2003_sophomore_wall');
+18086:     id: 'legend_2003_redraft_table',
+18087:     branch: 'legend_story_2003_class',
+18089:     legendStory: true,
+18090:     legendTopic: 'class',
+18096:       return isLegendStoryEnabled() && getLegendStorySeasonNum() === 3 && (ctx.gamesPlayed || 0) >= 20 && !hasLegendStoryFlag('seen_legend_2003_redraft_table') && ((STATE.finalOVR || 0) >= 80 || (p.fame || 0) >= 8);
+18116:     id: 'legend_2003_city_profile_echo',
+18117:     branch: 'legend_story_2003_city',
+18120:     legendStory: true,
+18121:     legendTopic: 'city',
+18127:       return isLegendStoryEnabled() && getLegendStorySeasonNum() >= 2 && getLegendSameTeamSeasons() >= 2 && !hasLegendStoryFlag('seen_legend_2003_city_profile_echo') && ((p.fanSupport || 0) >= 3 || getLegendStoryScore('cityBond') >= 2);
+18142:     id: 'legend_2003_community_court_echo',
+18143:     branch: 'legend_story_2003_city',
+18146:     legendStory: true,
+18147:     legendTopic: 'city',
+18152:       return isLegendStoryEnabled() && getLegendStorySeasonNum() >= 3 && getLegendStoryScore('cityBond') >= 4 && !hasLegendStoryFlag('seen_legend_2003_community_court_echo');
+18169:     id: 'legend_2003_veteran_locker_question',
+18170:     branch: 'legend_story_2003_team',
+18172:     legendStory: true,
+18173:     legendTopic: 'team',
+18178:       return isLegendStoryEnabled() && getLegendStorySeasonNum() >= 2 && (ctx.gamesPlayed || 0) >= 24 && !hasLegendStoryFlag('seen_legend_2003_veteran_locker_question') && (hasLegendStoryFlag('franchise_core') || hasLegendStoryFlag('franchise_connector'));
+18193:     id: 'legend_2003_front_office_window',
+18194:     branch: 'legend_story_2003_team',
+18197:     legendStory: true,
+18198:     legendTopic: 'team',
+18203:       return isLegendStoryEnabled() && getLegendStorySeasonNum() >= 3 && !hasLegendStoryFlag('seen_legend_2003_front_office_window') && (STATE.finalOVR || 0) >= 84 && getLegendStoryScore('dynasty') >= 3;
+18221:     id: 'legend_2003_tv_critic',
+18222:     branch: 'legend_story_2003_media',
+18224:     legendStory: true,
+18225:     legendTopic: 'media',
+18231:       return isLegendStoryEnabled() && (ctx.gamesPlayed || 0) >= 20 && !hasLegendStoryFlag('seen_legend_2003_tv_critic') && (getLegendStoryScore('mediaHeat') >= 4 || (p.controversy || 0) >= 3);
+18245:     id: 'legend_2003_forum_war',
+18246:     branch: 'legend_story_2003_media',
+18249:     legendStory: true,
+18250:     legendTopic: 'media',
+18255:       return isLegendStoryEnabled() && getLegendStoryYear() >= 2007 && !hasLegendStoryFlag('seen_legend_2003_forum_war') && (getLegendStoryScore('classRivalry') >= 4 || getLegendStoryScore('mediaHeat') >= 4);
+18269:     id: 'legend_2003_analytics_rise',
+18270:     branch: 'legend_story_2003_media',
+18273:     legendStory: true,
+18274:     legendTopic: 'media',
+18279:       return isLegendStoryEnabled() && getLegendStoryYear() >= 2012 && !hasLegendStoryFlag('seen_legend_2003_analytics_rise');
+18297: const LEGEND_STORY_1984_EVENTS = [
+18299:     id: 'legend_1984_arrival_newspaper',
+18300:     branch: 'legend_story_1984',
+18302:     legendStory: true,
+18303:     legendTopic: 'arrival',
+18312:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1984' && getLegendStorySeasonNum() === 1 && (ctx.gamesPlayed || 0) >= 2 && !hasLegendStoryFlag('seen_legend_1984_arrival_newspaper');
+18316:         setBranchNode('legend_story_1984', 'newspaper_kept', { era: '1984' });
+18322:         setBranchNode('legend_story_1984', 'newspaper_claim', { era: '1984' });
+18330:     id: 'legend_1984_rookie_hard_foul',
+18331:     branch: 'legend_story_1984',
+18333:     legendStory: true,
+18334:     legendTopic: 'pressure',
+18339:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1984' && getLegendStorySeasonNum() === 1 && (ctx.gamesPlayed || 0) >= 12 && !hasLegendStoryFlag('seen_legend_1984_rookie_hard_foul');
+18355:     id: 'legend_1984_veteran_bus',
+18356:     branch: 'legend_story_1984_team',
+18358:     legendStory: true,
+18359:     legendTopic: 'team',
+18364:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1984' && getLegendStorySeasonNum() >= 1 && (ctx.gamesPlayed || 0) >= 24 && !hasLegendStoryFlag('seen_legend_1984_veteran_bus');
+18379:     id: 'legend_1984_tv_first_closeup',
+18380:     branch: 'legend_story_1984_media',
+18382:     legendStory: true,
+18383:     legendTopic: 'media',
+18388:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1984' && getLegendStorySeasonNum() >= 2 && (ctx.gamesPlayed || 0) >= 18 && !hasLegendStoryFlag('seen_legend_1984_tv_first_closeup') && ((STATE.finalOVR || 0) >= 80 || getLegendStoryScore('oldSchoolRespect') >= 3);
+18404:     id: 'legend_1984_playoff_halfcourt',
+18405:     branch: 'legend_story_1984_playoff',
+18408:     legendStory: true,
+18409:     legendTopic: 'playoff',
+18414:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1984' && getLegendStorySeasonNum() >= 2 && !hasLegendStoryFlag('seen_legend_1984_playoff_halfcourt') && getConferenceSeed(STATE.careerTeam) <= 8;
+18430:     id: 'legend_1984_old_clipping',
+18431:     branch: 'legend_story_1984_legacy',
+18434:     legendStory: true,
+18435:     legendTopic: 'legacy',
+18440:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1984' && getLegendStorySeasonNum() >= 4 && !hasLegendStoryFlag('seen_legend_1984_old_clipping') && getLegendStoryScore('cityBond') >= 2;
+18457: const LEGEND_STORY_1996_EVENTS = [
+18459:     id: 'legend_1996_arrival_flashbulbs',
+18460:     branch: 'legend_story_1996',
+18462:     legendStory: true,
+18463:     legendTopic: 'arrival',
+18472:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1996' && getLegendStorySeasonNum() === 1 && (ctx.gamesPlayed || 0) >= 2 && !hasLegendStoryFlag('seen_legend_1996_arrival_flashbulbs');
+18476:         setBranchNode('legend_story_1996', 'craft_first', { era: '1996' });
+18482:         setBranchNode('legend_story_1996', 'cover_claim', { era: '1996' });
+18490:     id: 'legend_1996_shoe_meeting',
+18491:     branch: 'legend_story_1996_brand',
+18494:     legendStory: true,
+18495:     legendTopic: 'brand',
+18500:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1996' && getLegendStorySeasonNum() <= 3 && !hasLegendStoryFlag('seen_legend_1996_shoe_meeting') && ((STATE.finalOVR || 0) >= 78 || ((STATE.career.profile && STATE.career.profile.fame) || 0) >= 4);
+18516:     id: 'legend_1996_next_face_pressure',
+18517:     branch: 'legend_story_1996_media',
+18519:     legendStory: true,
+18520:     legendTopic: 'media',
+18525:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1996' && getLegendStorySeasonNum() >= 1 && (ctx.gamesPlayed || 0) >= 18 && !hasLegendStoryFlag('seen_legend_1996_next_face_pressure') && ((STATE.finalOVR || 0) >= 80 || getLegendStoryScore('commercialPull') >= 2);
+18541:     id: 'legend_1996_class_rival_walkway',
+18542:     branch: 'legend_story_1996_class',
+18544:     legendStory: true,
+18545:     legendTopic: 'class',
+18550:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1996' && getLegendStorySeasonNum() >= 2 && (ctx.gamesPlayed || 0) >= 14 && !hasLegendStoryFlag('seen_legend_1996_class_rival_walkway');
+18566:     id: 'legend_1996_playoff_spotlight',
+18567:     branch: 'legend_story_1996_playoff',
+18569:     legendStory: true,
+18570:     legendTopic: 'playoff',
+18575:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1996' && getLegendStorySeasonNum() >= 2 && (ctx.gamesPlayed || 0) >= 50 && !hasLegendStoryFlag('seen_legend_1996_playoff_spotlight') && getConferenceSeed(STATE.careerTeam) <= 10;
+18591:     id: 'legend_1996_billboard_or_locker',
+18592:     branch: 'legend_story_1996_legacy',
+18595:     legendStory: true,
+18596:     legendTopic: 'legacy',
+18601:       return isLegendStoryEnabled() && String(STATE.eraStart) === '1996' && getLegendStorySeasonNum() >= 3 && !hasLegendStoryFlag('seen_legend_1996_billboard_or_locker') && (getLegendStoryScore('commercialPull') >= 2 || ((STATE.career.profile && STATE.career.profile.fame) || 0) >= 8);
+18618: var LEGEND_ERA_STORY_PACKS = {
+18619:   '1984': { era: '1984', events: LEGEND_STORY_1984_EVENTS },
+18620:   '1996': { era: '1996', events: LEGEND_STORY_1996_EVENTS },
+18621:   '2003': { era: '2003', events: LEGEND_STORY_EVENTS }
+19094:         if (win) { setBranchNode('china_team', 'national_flag', { ending: 'hero_ball_win' }); b = getBranchState('china_team'); b.legend = (b.legend || 0) + 4; addAttrDelta('CLU', 2); STATE.finalOVR = calcOVR(STATE.attrs); return '你连续三个回合点名对手最强防守人。最后一次出手命中后，替补席冲进场内。<br><br>结果：关键战取胜；关键球+2。'; }
+19103:           b.legend = (b.legend || 0) + 2; b.chemistry = (b.chemistry || 0) + 3;
+19115:         var b = setBranchNode('china_team', 'injured_hero', { ending: 'injured_legend' });
+19116:         b.legend = (b.legend || 0) + 5;
+19167:           b.legend = (b.legend || 0) + 4;
+19195:         var b = setBranchNode('china_team', 'national_legend', { finalRole: 'captain' });
+19196:         b.legend = (b.legend || 0) + 3;
+19652:           recordLegendNarrativeMemory('legend_superstar_recruit_call', '传奇时代：午夜电话', '认真考虑联手', '电话那头没有再多解释。你知道这不是简单的招募，而是一种时代判断：你们要不要把对抗换成合流。', { superteam: 2, mediaHeat: 1 });
+19666:           recordLegendNarrativeMemory('legend_superstar_recruit_call', '传奇时代：午夜电话', '保持距离', '你把那通电话放回它该在的位置。不是所有伟大同场都需要同队，有些故事只需要彼此记得对方还在。', { classRivalry: 1, mediaTrust: 1 });
+19683:           recordLegendNarrativeMemory('legend_superstar_recruit_call', '传奇时代：午夜电话', '把消息放给媒体', '你没有让这通电话只停在手机里。第二天，报纸、电台和节目都开始讨论：这会不会是 2003 之后又一次联盟重排的起点。', { superteam: 1, mediaHeat: 2 });
+20108:       { label: '组织球队合练', hint: '默契提升，开启领袖线', apply: function() { var mods = getNextSeasonMods(); setBranchNode('team_practice', 'practice_start', { status: 'organized' }); mods.teamChemistry = Math.min(5, (mods.teamChemistry || 0) + 2); mods.formVariance = Math.max(-3, (mods.formVariance || 0) - 1); addAttrDelta('PAS', 1); STATE.finalOVR = calcOVR(STATE.attrs); if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_start', '传奇时代：提前开灯的训练馆', '组织球队合练', '你把队友一个个叫回训练馆。没人说这是领袖投票，但那年夏天以后，年轻球员开始知道：球队真正的秩序，常常从第一个到馆的人开始。', { lockerRoom: 2, dynasty: 1 }); return '你把队友一个个叫回训练馆。没人说这是领袖投票，但所有人都在用行动投票。<br><br>效果：传球+1；球队默契提升；传奇剧情分数：更衣室+2，王朝线+1。'; } return '你把队友一个个叫回训练馆。没人说这是领袖投票，但所有人都在用行动投票。<br><br>效果：传球+1；球队默契提升；球队线进入回应阶段。'; }},
+20109:       { label: '个人恢复优先', hint: '降低伤病风险', apply: function() { var mods = getNextSeasonMods(); setBranchNode('team_practice', 'practice_start', { status: 'recovery' }); mods.injuryRiskBonus = Math.max(-4, (mods.injuryRiskBonus || 0) - 1); if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_start', '传奇时代：提前开灯的训练馆', '个人恢复优先', '你选择先把身体修好。教练理解这个决定，因为漫长生涯里，有些夏天不是为了变得更亮，而是为了让灯还能继续亮下去。', { craft: 1, mediaTrust: 1 }); return '你选择把身体修好。教练理解这个决定，也提醒你：真正能留在时代里的人，必须先学会保护自己。<br><br>效果：下赛季伤病风险略降；传奇剧情分数：技艺路线+1，媒体信任+1。'; } return '你选择把身体修好。教练理解这个决定，但队友们也会记住这个夏天你没有出现。<br><br>效果：下赛季伤病风险略降；球队线进入回应阶段。'; }}
+20120:       { label: '主动承担领袖责任', hint: '球队默契和传球提升', apply: function() { var mods = getNextSeasonMods(); setBranchNode('team_practice', 'practice_response', { leadership: 'vocal' }); mods.teamChemistry = Math.min(5, (mods.teamChemistry || 0) + 2); addAttrDelta('PAS', 1); STATE.finalOVR = calcOVR(STATE.attrs); if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_response', '传奇时代：更衣室开始看向你', '主动承担领袖责任', '你不再只是参加合练的人，而是安排训练内容、提醒年轻队友站位的人。队友们后来谈起那个夏天，很少说你喊了什么，只说你真的站在那里。', { lockerRoom: 2, dynasty: 1 }); return '你不再只是参加合练的人，而是安排训练内容、提醒年轻队友站位的人。<br><br>效果：传球+1；球队默契提升；传奇剧情分数：更衣室+2，王朝线+1。'; } return '你不再只是参加合练的人，而是安排训练内容、提醒年轻队友站位的人。<br><br>效果：传球+1；球队默契提升；球队线进入队魂阶段。'; }},
+20121:       { label: '保持低调，只做好自己', hint: '降低波动，不争队内话语权', apply: function() { var mods = getNextSeasonMods(); setBranchNode('team_practice', 'practice_response', { leadership: 'quiet' }); mods.formVariance = Math.max(-3, (mods.formVariance || 0) - 1); if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_response', '传奇时代：更衣室开始看向你', '保持低调', '你没有演讲，也没有喊口号，只是每天第一个到训练馆。久而久之，早到成了你的语言。', { craft: 2, lockerRoom: 1 }); return '你没有演讲，也没有喊口号，只是每天第一个到训练馆。久而久之，这也成了一种声音。<br><br>效果：下赛季状态波动略降；传奇剧情分数：技艺路线+2，更衣室+1。'; } return '你没有演讲，也没有喊口号，只是每天第一个到训练馆。久而久之，这也成了一种声音。<br><br>效果：下赛季状态波动略降；球队线进入队魂阶段。'; }},
+20122:       { label: '把舞台让给年轻队友', hint: '年轻球员成长，个人声望温和', apply: function() { var mods = getNextSeasonMods(); setBranchNode('team_practice', 'practice_mentor', { leadership: 'mentor' }); mods.teamChemistry = Math.min(5, (mods.teamChemistry || 0) + 1); STATE.career.flags.youthDevelopment = true; if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_response', '传奇时代：更衣室开始看向你', '把舞台让给年轻队友', '你把训练安排和回合组织交给年轻人，只在关键节点帮他们纠错。那不是退后，而是把时代教给下一批人。', { lockerRoom: 2, historyShift: 1 }); return '你把训练安排和回合组织交给年轻人，只在关键节点帮他们纠错。他们开始敢在你面前大声说话。<br><br>效果：球队默契略升；传奇剧情分数：更衣室+2，历史偏移+1。'; } return '你把训练安排和回合组织交给年轻人，只在关键节点帮他们纠错。他们开始敢在你面前大声说话。<br><br>重点：你选择让位。<br><br>影响：球队默契略升；年轻球员成长。'; }}
+20133:       { label: '成为更衣室领袖', hint: '退役球衣队史分倾向提升', apply: function() { setBranchNode('team_practice', 'practice_identity', { identity: 'locker_room_leader' }); STATE.career.flags.lockerRoomLeader = true; if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_identity', '传奇时代：队魂雏形', '成为更衣室领袖', '你说话不一定最多，但关键时刻所有人都会看你。多年后，队友谈起你时，先说的不是场均，而是他让我们相信自己能赢。', { lockerRoom: 3, dynasty: 1 }); return '你说话不一定最多，但关键时刻所有人都会看你。<br><br>结果：获得“更衣室领袖”长期标签；传奇剧情分数：更衣室+3，王朝线+1。'; } return '你说话不一定最多，但关键时刻所有人都会看你。<br><br>结果：获得“更衣室领袖”长期标签。'; }},
+20134:       { label: '成为训练馆标杆', hint: '身体管理更稳定', apply: function() { var mods = getNextSeasonMods(); setBranchNode('team_practice', 'practice_identity', { identity: 'gym_standard' }); mods.injuryRiskBonus = Math.max(-4, (mods.injuryRiskBonus || 0) - 1); if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_identity', '传奇时代：队魂雏形', '成为训练馆标杆', '你的训练方式成了队内年轻人的模板。没有海报，没有口号，只有每天重复。', { craft: 3, lockerRoom: 1 }); return '你的训练方式成了队内年轻人的模板。没有海报，没有口号，只有每天重复。<br><br>结果：获得“训练馆标杆”长期标签；传奇剧情分数：技艺路线+3，更衣室+1。'; } return '你的训练方式成了队内年轻人的模板。没有海报，没有口号，只有每天重复。<br><br>结果：获得“训练馆标杆”长期标签；下赛季伤病风险略降。'; }},
+20135:       { label: '成为年轻球员导师', hint: '传球和年轻球员成长提升', apply: function() { setBranchNode('team_practice', 'practice_identity', { identity: 'team_mentor' }); STATE.career.flags.youthMentor = true; addAttrDelta('PAS', 1); STATE.finalOVR = calcOVR(STATE.attrs); if (isLegendStoryEnabled()) { recordLegendNarrativeMemory('legend_team_practice_identity', '传奇时代：队魂雏形', '成为年轻球员导师', '你开始把录像课交给年轻人讲，自己只补最后一层。他们讲得越来越像你，而你第一次意识到，传奇也可以用传下去的方式存在。', { lockerRoom: 2, historyShift: 1 }); return '你开始把每个夏天的录像课交给年轻人讲，自己只补最后一层。他们讲得越来越像你。<br><br>效果：传球+1；传奇剧情分数：更衣室+2，历史偏移+1。'; } return '你开始把每个夏天的录像课交给年轻人讲，自己只补最后一层。他们讲得越来越像你。<br><br>效果：传球+1；获得“年轻球员导师”标签。'; }}
+20327:         && (['national_core','team_core','managed_core','national_flag','team_revival','injured_hero','national_legend','national_mentor','honorable_exit'].indexOf(chinaNode) >= 0
+20579:         return ['national_core','team_core','managed_core','national_flag','team_revival','injured_hero','national_legend','national_mentor','honorable_exit'].indexOf(cn) >= 0;
+21087:           recordLegendNarrativeMemory('legend_city_farewell', '传奇时代：旧城告别', '体面告别', '你写了一封很短的信。没有辩解，没有煽情，只是把感谢留给了这座城市，把下一段路留给了球场。地方报纸第二天把标题写得很轻：一个时代，礼貌地转身。', { cityBond: 2, mediaTrust: 1 });
+21097:           recordLegendNarrativeMemory('legend_city_farewell', '传奇时代：旧城告别', '承诺未来回归', '你没有把门关上。你说，等这一段职业路走完，会先回来看一眼这座城市。那句话不大，却让很多人记了很久。', { cityBond: 2, mediaTrust: 1 });
+21107:           recordLegendNarrativeMemory('legend_city_farewell', '传奇时代：旧城告别', '冷漠离开', '你没有多说一句话，只是把行李箱推进了机场。第二天，城市电台开始讨论：一个人要怎样离开，才不会把自己从历史里删掉。', { mediaHeat: 1, mediaTrust: -1 });
+21733:         setBranchNode('charity', 'legacy_legend', { legacy: 'legend' });
+21828:         setBranchNode('retirement_countdown', 'legacy_legend', { legacy: 'legend' });
+22005:         setBranchNode('retirement_countdown', 'legacy_legend', { legacy: 'legend' });
+22135:         return cn === 'national_legend' || cn === 'national_mentor' || cn === 'honorable_exit';
+23301:     league: JSON.parse(JSON.stringify(NBA2K_DATA || {})),
+23420:         // STATE 与 NBA2K_DATA 是 const，只能原地清空后填充，保证所有引用仍然有效
+23426:         if (snap.league && typeof NBA2K_DATA !== 'undefined') {
+23427:           Object.keys(NBA2K_DATA).forEach(function(k) { delete NBA2K_DATA[k]; });
+23428:           Object.assign(NBA2K_DATA, snap.league);
+23731:   NBA2K_TEAMS.forEach(function(t) {
+23732:     STATE._rosterBefore[t] = (NBA2K_DATA[t] || []).map(function(p) {
+23782:   if (c.flags.legendFarewellQuestionDone) return false;
+23787:   var ev = getBranchEventById('legend_farewell_tour_question');
+23790:     STATE.career.flags.legendFarewellQuestionDone = true;
+23794:   STATE._legendFarewellEvent = ev;
+23795:   STATE._legendFarewellScenePage = 0;
+23800:   var ev = STATE._legendFarewellEvent;
+23802:   var existing = document.getElementById('legend-farewell-question-modal');
+23805:   var sceneIdx = STATE._legendFarewellScenePage || 0;
+23806:   var html = '<div class="team-picker-overlay" id="legend-farewell-question-modal">';
+23827:   STATE._legendFarewellScenePage = (STATE._legendFarewellScenePage || 0) + 1;
+23832:   var ev = STATE._legendFarewellEvent;
+23839:   STATE.career.flags.legendFarewellQuestionDone = true;
+23842:   var modal = document.getElementById('legend-farewell-question-modal');
+23844:   STATE._legendFarewellEvent = null;
+23845:   STATE._legendFarewellScenePage = 0;
+23850:   var existing = document.getElementById('legend-farewell-question-result-modal');
+23852:   var html = '<div class="team-picker-overlay" id="legend-farewell-question-result-modal">';
+23863:   var modal = document.getElementById('legend-farewell-question-result-modal');
+25443:   NBA2K_TEAMS.forEach(function(t) {
+25464:     NBA2K_TEAMS.forEach(function(t) {
+25664:   NBA2K_TEAMS.forEach(function(t) {
+25673:     var roster = NBA2K_DATA[t] || [];
+25705:     var rr = NBA2K_DATA[recruitTarget] || [];
+25727:     NBA2K_TEAMS.forEach(function(t) {
+25752:       var broster = NBA2K_DATA[bt] || [];
+25766:     NBA2K_TEAMS.forEach(function(t) {
+25770:       var r = NBA2K_DATA[t] || [];
+25784:       NBA2K_TEAMS.forEach(function(t) {
+25788:         var r3 = NBA2K_DATA[t] || [];
+26053:   if (!STATE.career || !STATE.career.flags || !team || typeof NBA2K_DATA === 'undefined') return false;
+26057:   var roster = NBA2K_DATA[team] || [];
+26081:           eventId: 'legend_2003_superstar_recruit_anchor',
+26225:   var afterRoster = (NBA2K_DATA && NBA2K_DATA[team]) || [];
+26378:     var list = (NBA2K_DATA && NBA2K_DATA[team]) || [];
+26398:   if (team && NBA2K_DATA && NBA2K_DATA[team]) {
+26399:     var roster = NBA2K_DATA[team] || [];
+26404:   if (typeof NBA2K_TEAMS !== 'undefined' && typeof NBA2K_DATA !== 'undefined') {
+26405:     for (var ti = 0; ti < NBA2K_TEAMS.length; ti++) {
+26406:       var t = NBA2K_TEAMS[ti];
+26407:       var rr = NBA2K_DATA[t] || [];
+26811:   if (!NBA2K_DATA || NBA2K_DATA._draftClass2026Applied) return;
+26812:   NBA2K_DATA._draftClass2026Applied = true;
+26820:     var roster = NBA2K_DATA[t];
+26885:   if (!NBA2K_DATA || typeof HISTORICAL_DRAFT_CLASSES === 'undefined') return;
+26888:   if (!cls || !cls.length || NBA2K_DATA['_eraDraftApplied_' + eraYear]) return;
+26889:   NBA2K_DATA['_eraDraftApplied_' + eraYear] = true;
+26894:     var roster = NBA2K_DATA[t];
+26972:     var roster = NBA2K_DATA[t];
+27013:   var teams = NBA2K_TEAMS.slice().sort(function(a, b) {
+27031:         (NBA2K_DATA[t] || []).forEach(function(p) {
+27036:       var roster = NBA2K_DATA[t];
+27062:         (NBA2K_DATA[fb] || []).forEach(function(p) {
+27067:       var fbRoster = NBA2K_DATA[fb];
+27102:   var rosterA = NBA2K_DATA[teamA];
+27103:   var rosterB = NBA2K_DATA[teamB];
+27118:   if (!NBA2K_DATA) return;
+27124:   NBA2K_TEAMS.forEach(function(t) {
+27142:   var shuffled = NBA2K_TEAMS.slice().sort(function() { return rngNext() - 0.5; });
+27161:       var rosterA = NBA2K_DATA[a];
+27162:       var rosterB = NBA2K_DATA[b];
+27299:   var teams = typeof NBA2K_TEAMS !== 'undefined' ? NBA2K_TEAMS : [];
+27301:     var roster = NBA2K_DATA[t];
+27353:     NBA2K_DATA[t] = newRoster;
+27358:     NBA2K_TEAMS.forEach(function(t) {
+27359:       (NBA2K_DATA[t] || []).forEach(function(p) {
+27375:   NBA2K_TEAMS.forEach(function(t) {
+27376:     var roster = NBA2K_DATA[t];
+27423:     NBA2K_DATA[t] = newRoster;
+27752:   const team = NBA2K_TEAMS[Math.floor(Math.random() * NBA2K_TEAMS.length)];
+27753:   const roster = NBA2K_DATA[team] || [];
+27773:   STATE.careerTeam = NBA2K_TEAMS[Math.floor(Math.random() * NBA2K_TEAMS.length)];
+27776:   var pool = NBA2K_TEAMS.filter(function(t) { return t !== STATE.careerTeam; });
+
+--- FUNCTION renderModeSelect ---
+function renderModeSelect() {
+  const container = html('feature-grid');
+  container.innerHTML = '';
+  STATE.draftMode = loadDraftMode();
+  STATE.eraStart = loadEraStart();
+  if (STATE._legendEraPanelOpen == null) STATE._legendEraPanelOpen = false;
+  
+  // Two feature cards like build-a-player.com
+  const cards = [
+    {
+      tag: 'Current',
+      tagClass: 'gold',
+      title: '生涯模式',
+      sub: '从现役球员中夺取属性，组建我的球员',
+      btnLabel: '🎮 进入活动',
+      mode: 'current',
+    },
+    {
+      tag: 'LEGEND',
+      tagClass: 'new',
+      title: '传奇模式',
+      sub: '选择历史时代，从传奇联盟开启生涯',
+      btnLabel: '选择时代',
+      mode: 'legend',
+    },
+  ];
+  
+  cards.forEach((c) => {
+    const card = document.createElement('div');
+    card.className = 'feature-card';
+    if (c.disabled) card.classList.add('disabled-card');
+    var isLegendActive = STATE.draftMode === 'historical';
+    if ((c.mode === 'legend' && isLegendActive) || (c.mode === 'current' && !isLegendActive)) card.classList.add('selected');
+    card.innerHTML = `
+      <span class="fc-tag ${c.tagClass}">${c.tag}</span>
+      <div class="fc-title">${c.title}</div>
+      <div class="fc-sub">${c.sub}</div>
+      <button class="fc-btn" ${c.disabled ? 'disabled' : ''}>
+        ${c.btnLabel}
+      </button>
+      
+    `;
+    const btn = card.querySelector('.fc-btn');
+    if (!c.disabled) {
+      btn.onclick = (e) => {
+        trackEvent({act:"click",blk:"BMC098",pos:"TC1",label:"开始游戏"});
+        e.stopPropagation();
+        if (!getIsInApp()) {
+          showDownloadModal();
+          return;
+        }
+        if (c.mode === 'legend') {
+          STATE.mode = 'legend';
+          STATE.draftMode = 'historical';
+          STATE.eraStart = String(loadEraStart() || STATE.eraStart || '2003');
+          openLegendEraModal();
+          renderModeSelect();
+          return;
+        }
+        STATE._legendEraPanelOpen = false;
+        setGameMode('current');
+        startGame();
+      };
+    }
+    container.appendChild(card);
+    if (c.mode === 'current') {
+      var mainBtn = card.querySelector('.fc-btn');
+      if (mainBtn) {
+        mainBtn.insertAdjacentHTML('afterend', '<button class="fc-btn" id="continue-activity-btn" style="margin-top:10px;background:#2f6fed;box-shadow:0 4px 0 #1d4fb8;" onclick="event.stopPropagation();manualLoadGame(1)">▶ 继续活动</button>');
+      }
+    }
+  });
+
+  if (!STATE.mode) STATE.mode = STATE.draftMode === 'historical' ? 'legend' : 'current';
+  refreshContinueActivityButton();
+}
+
+function startGame() {
+  ensureHupuUser(true);
+  if (STATE.mode === 'current' || STATE.mode === 'legend') {
+    // 输出灰熊(MEM)和凯尔特人(BOS)全阵容
+    console.log('========== 🏀 灰熊(MEM) 全阵容 ==========');
+    (NBA2K_DATA['MEM'] || []).forEach(function(p) {
+      console.log(p.cname + ' (' + p.name + ')', '| OVR:', p.ovr, '| 位置:', p.pos, '| 类型:', p.type);
+    });
+    console.log('==========================================');
+    console.log('========== 🏀 凯尔特人(BOS) 全阵容 ==========');
+    (NBA2K_DATA['BOS'] || []).forEach(function(p) {
+      console.log(p.cname + ' (' + p.name + ')', '| OVR:', p.ovr, '| 位置:', p.pos, '| 类型:', p.type);
+    });
+    console.log('==========================================');
+    showScreen('screen-position');
+  } else {
+    alert('该模式开发中');
+  }
+}
+
+// ==================== 2. 位置选择 ====================
+function renderPositionSelect() {
+  const grid = html('pos-grid');
+  grid.innerHTML = '';
+  
+  const icons = { PG: '🎯', SG: '🔥', SF: '🏃', PF: '💪', C: '🧱' };
+  SIM_CONFIG.POS_LIST.forEach(pos => {
+    const card = document.createElement('div');
+    card.className = 'pos-card';
+    card.innerHTML = `
+      <div class="pos-label">${SIM_CONFIG.POSITIONS[pos]}</div>
+      <div class="pos-en">${icons[pos] || ''} ${pos}</div>
+    `;
+    card.onclick = () => {
+      $$('.pos-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      STATE.position = pos;
+    };
+    grid.appendChild(card);
+  });
+}
+
+function confirmPosition() {
+  if (!STATE.position) {
+    return;
+  }
+  STATE.selectedPlayer = null;
+  STATE.currentTeam = null;
+  showScreen('screen-build');
+  renderBuildUI();
+  renderTeamPicker();
+}
+
+// ==================== 3. 建球员 - LEFT-RIGHT SPLIT ====================
+
+function renderBuildUI() {
+  var pi = document.getElementById('build-pos-indicator');
+  if (pi) pi.textContent = '我选择的位置：' + (SIM_CONFIG.POSITIONS[STATE.position] || STATE.position) + '（' + STATE.position + '）';
+  renderLeftAttrs();
+  renderProgress();
+}
+
+function renderProgress() {
+  const
+
+--- FUNCTION startGame ---
+function startGame() {
+  ensureHupuUser(true);
+  if (STATE.mode === 'current' || STATE.mode === 'legend') {
+    // 输出灰熊(MEM)和凯尔特人(BOS)全阵容
+    console.log('========== 🏀 灰熊(MEM) 全阵容 ==========');
+    (NBA2K_DATA['MEM'] || []).forEach(function(p) {
+      console.log(p.cname + ' (' + p.name + ')', '| OVR:', p.ovr, '| 位置:', p.pos, '| 类型:', p.type);
+    });
+    console.log('==========================================');
+    console.log('========== 🏀 凯尔特人(BOS) 全阵容 ==========');
+    (NBA2K_DATA['BOS'] || []).forEach(function(p) {
+      console.log(p.cname + ' (' + p.name + ')', '| OVR:', p.ovr, '| 位置:', p.pos, '| 类型:', p.type);
+    });
+    console.log('==========================================');
+    showScreen('screen-position');
+  } else {
+    alert('该模式开发中');
+  }
+}
+
+// ==================== 2. 位置选择 ====================
+function renderPositionSelect() {
+  const grid = html('pos-grid');
+  grid.innerHTML = '';
+  
+  const icons = { PG: '🎯', SG: '🔥', SF: '🏃', PF: '💪', C: '🧱' };
+  SIM_CONFIG.POS_LIST.forEach(pos => {
+    const card = document.createElement('div');
+    card.className = 'pos-card';
+    card.innerHTML = `
+      <div class="pos-label">${SIM_CONFIG.POSITIONS[pos]}</div>
+      <div class="pos-en">${icons[pos] || ''} ${pos}</div>
+    `;
+    card.onclick = () => {
+      $$('.pos-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      STATE.position = pos;
+    };
+    grid.appendChild(card);
+  });
+}
+
+function confirmPosition() {
+  if (!STATE.position) {
+    return;
+  }
+  STATE.selectedPlayer = null;
+  STATE.currentTeam = null;
+  showScreen('screen-build');
+  renderBuildUI();
+  renderTeamPicker();
+}
+
+// ==================== 3. 建球员 - LEFT-RIGHT SPLIT ====================
+
+function renderBuildUI() {
+  var pi = document.getElementById('build-pos-indicator');
+  if (pi) pi.textContent = '我选择的位置：' + (SIM_CONFIG.POSITIONS[STATE.position] || STATE.position) + '（' + STATE.position + '）';
+  renderLeftAttrs();
+  renderProgress();
+}
+
+function renderProgress() {
+  const p = document.getElementById('build-progress-area');
+  if (!p) return;
+  const pct = Math.round((STATE.lockedCount / 13) * 100);
+  p.innerHTML = `
+    <div class="build-progress">
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-text">${STATE.lockedCount}/13</div>
+    </div>
+  `;
+}
+
+/** Render left attribute sidebar */
+function renderLeftAttrs() {
+  // OVR
+  const ovrEl = document.getElementById('bl-ovr');
+  if (ovrEl) {
+    let ovr = STATE.finalOVR || 0;
+    if (!ovr && STATE.position) {
+      const w = SIM_CONFIG.OVR_WEIGHTS[STATE.position];
+      if (w) {
+        // 先算已锁定属性的加权平均值
+        let lockedSum = 0, lockedWeight = 0;
+        ATTR_KEYS.forEach(k => {
+          const val = STATE.attrs[k];
+          const weight = w[k] || 0.07;
+          if (val !== null) { lockedSum += val * weight; lockedWeight += weight; }
+        });
+        // 未锁定任何属性时显示 --
+        if (lockedWeight === 0) { ovr = 0; }
+        else {
+          const fillAvg = lockedSum / lockedWeight;
+          // 用填充值计算完整OVR
+          let c = 0;
+          ATTR_KEYS.forEach(k => {
+            const val = STATE.attrs[k] !== null ? STATE.attrs[k] : Math.round(fillAvg);
+            c += val * (w[k] || 0.07);
+          });
+          ovr = Math.round(c);
+        }
+      }
+    }
+    ovrEl.textContent = ovr > 0 ? ovr : '--';
+  }
+
+  // Attributes
+  const container = document.getElementById('bl-attrs');
+  if (!container) return;
+  container.innerHTML = '';
+  
+  ATTR_KEYS.forEach(key => {
+    const val = STATE.attrs[key];
+    const isLocked = val !== null;
+    const div = document.createElement('div');
+    
+    let cls = 'ba-slot';
+    if (isLocked) cls += ' locked';
+    else if (STATE.selectedPlayer) {
+      cls += ' clickable';
+      div.onclick = () => lockAttr(key);
+    }
+    div.className = cls;
+    
+    if (isLocked) {
+      const g = getGrade(val);
+      const slot = STATE.attrSlots[key];
+      const hadPenalty = slot && slot.penalty < 1.0;
+      div.innerHTML = `
+        <span class="ba-label">${attrCN(key)}</span>
+        <span class="ba-grade" style="color:${g.color}">${g.letter}</span>
+        <span class="ba-owner" title="${hadPenalty ? `原始${slot.raw} × ${slot.penalty.toFixed(2)}` : ''}" 
+             style="${hadPenalty ? 'color:var(--accent);' : ''}">${slot?.player ? getPlayerDisplayName(slot.player) : ''}</span>
+      `;
+    } else if (STATE.selectedPlayer) {
+      const pv = parseInt(STATE.sel
+
+--- FUNCTION renderPositionSelect ---
+function renderPositionSelect() {
+  const grid = html('pos-grid');
+  grid.innerHTML = '';
+  
+  const icons = { PG: '🎯', SG: '🔥', SF: '🏃', PF: '💪', C: '🧱' };
+  SIM_CONFIG.POS_LIST.forEach(pos => {
+    const card = document.createElement('div');
+    card.className = 'pos-card';
+    card.innerHTML = `
+      <div class="pos-label">${SIM_CONFIG.POSITIONS[pos]}</div>
+      <div class="pos-en">${icons[pos] || ''} ${pos}</div>
+    `;
+    card.onclick = () => {
+      $$('.pos-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      STATE.position = pos;
+    };
+    grid.appendChild(card);
+  });
+}
+
+function confirmPosition() {
+  if (!STATE.position) {
+    return;
+  }
+  STATE.selectedPlayer = null;
+  STATE.currentTeam = null;
+  showScreen('screen-build');
+  renderBuildUI();
+  renderTeamPicker();
+}
+
+// ==================== 3. 建球员 - LEFT-RIGHT SPLIT ====================
+
+function renderBuildUI() {
+  var pi = document.getElementById('build-pos-indicator');
+  if (pi) pi.textContent = '我选择的位置：' + (SIM_CONFIG.POSITIONS[STATE.position] || STATE.position) + '（' + STATE.position + '）';
+  renderLeftAttrs();
+  renderProgress();
+}
+
+function renderProgress() {
+  const p = document.getElementById('build-progress-area');
+  if (!p) return;
+  const pct = Math.round((STATE.lockedCount / 13) * 100);
+  p.innerHTML = `
+    <div class="build-progress">
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-text">${STATE.lockedCount}/13</div>
+    </div>
+  `;
+}
+
+/** Render left attribute sidebar */
+function renderLeftAttrs() {
+  // OVR
+  const ovrEl = document.getElementById('bl-ovr');
+  if (ovrEl) {
+    let ovr = STATE.finalOVR || 0;
+    if (!ovr && STATE.position) {
+      const w = SIM_CONFIG.OVR_WEIGHTS[STATE.position];
+      if (w) {
+        // 先算已锁定属性的加权平均值
+        let lockedSum = 0, lockedWeight = 0;
+        ATTR_KEYS.forEach(k => {
+          const val = STATE.attrs[k];
+          const weight = w[k] || 0.07;
+          if (val !== null) { lockedSum += val * weight; lockedWeight += weight; }
+        });
+        // 未锁定任何属性时显示 --
+        if (lockedWeight === 0) { ovr = 0; }
+        else {
+          const fillAvg = lockedSum / lockedWeight;
+          // 用填充值计算完整OVR
+          let c = 0;
+          ATTR_KEYS.forEach(k => {
+            const val = STATE.attrs[k] !== null ? STATE.attrs[k] : Math.round(fillAvg);
+            c += val * (w[k] || 0.07);
+          });
+          ovr = Math.round(c);
+        }
+      }
+    }
+    ovrEl.textContent = ovr > 0 ? ovr : '--';
+  }
+
+  // Attributes
+  const container = document.getElementById('bl-attrs');
+  if (!container) return;
+  container.innerHTML = '';
+  
+  ATTR_KEYS.forEach(key => {
+    const val = STATE.attrs[key];
+    const isLocked = val !== null;
+    const div = document.createElement('div');
+    
+    let cls = 'ba-slot';
+    if (isLocked) cls += ' locked';
+    else if (STATE.selectedPlayer) {
+      cls += ' clickable';
+      div.onclick = () => lockAttr(key);
+    }
+    div.className = cls;
+    
+    if (isLocked) {
+      const g = getGrade(val);
+      const slot = STATE.attrSlots[key];
+      const hadPenalty = slot && slot.penalty < 1.0;
+      div.innerHTML = `
+        <span class="ba-label">${attrCN(key)}</span>
+        <span class="ba-grade" style="color:${g.color}">${g.letter}</span>
+        <span class="ba-owner" title="${hadPenalty ? `原始${slot.raw} × ${slot.penalty.toFixed(2)}` : ''}" 
+             style="${hadPenalty ? 'color:var(--accent);' : ''}">${slot?.player ? getPlayerDisplayName(slot.player) : ''}</span>
+      `;
+    } else if (STATE.selectedPlayer) {
+      const pv = parseInt(STATE.selectedPlayer[key]) || 50;
+      // 计算跨位置衰减后的值
+      const playerPos = getPlayerMainPos(STATE.selectedPlayer);
+      const penalty = getPosPenalty(STATE.position, playerPos, key);
+      const adjustedVal = Math.round(pv * penalty);
+      const hasPenalty = penalty < 1.0;
+      const pg = getGrade(adjustedVal);
+      div.innerHTML = `
+        <span class="ba-label">${attrCN(key)}</span>
+        <span class="ba-grade" style="color:${pg.color}">${pg.letter}</span>
+        <span class="ba-owner"${hasPenalty ? ` style="color:var(--accent);font-size:9px;"` : ''}>${hasPenalty ? `${adjustedVal}▼` : adjustedVal}</span>
+      `;
+    } else {
+      div.innerHTML = `
+        <span class="ba-label">${attrCN(key)}</span>
+        <span class="ba-empty">+</span>
+      `;
+    }
+    container.appendChild(div);
+  });
+
+  // Footer — 已隐
+
+--- FUNCTION renderRosterPlayers ---
+function renderRosterPlayers(team, shown, allAvailable) {
+  const rosterArea = document.getElementById('br-roster-area');
+  if (!rosterArea) return;
+  
+  let listHtml = `<div style="display:flex;align-items:center;gap:6px;padding-bottom:4px;flex-wrap:wrap;">
+    <span style="font-size:13px;font-weight:700;font-family:var(--font-display);letter-spacing:1px;">${getTeamName(team)}</span>
+    <span style="font-size:11px;color:var(--text-dim);">展示 ${shown.length}人 · 剩余 ${allAvailable.length}人</span>
+  </div><div class="br-roster-list" style="max-height:none;">`;
+  
+  shown.forEach(p => {
+    const sel = STATE.selectedPlayer?.name === p.name;
+    const playerPos = getPlayerMainPos(p);
+    const hsStyle = getPlayerHeadshotStyle(p, 32);
+    const ovrGrade = getOvrGrade(parseInt(p.ovr) || 50);
+    listHtml += `<div class="br-player${sel ? ' selected' : ''}" onclick="pickPlayer('${p.name.replace(/'/g, "\\'")}')">
+      <div class="bp-left">
+        <div class="bp-headshot" style="${hsStyle}"></div>
+        <div>
+          <div class="bp-name">${p.cname || p.name}</div>
+          <div class="bp-detail">${playerPos}</div>
+        </div>
+      </div>
+      <div class="bp-meta">
+        <span class="bp-ovr">${p.ovr}</span>
+      </div>
+    </div>`;
+  });
+  
+  listHtml += '</div>';
+  
+  // 跨位置衰减提示 + 强制选择提示
+  const hasAnyPenalty = shown.some(p => getPlayerMainPos(p) !== STATE.position);
+  listHtml += `<div style="display:flex;gap:6px;padding:4px 0;flex-wrap:wrap;align-items:center;">
+    <span style="font-size:9px;color:var(--text-dim);">
+      ${hasAnyPenalty ? '⚠️ 跨位置衰减生效' : '✅ 同位置属性无衰减'}
+    </span>
+    <span style="font-size:10px;color:var(--accent);margin-left:auto;font-weight:600;">
+      👆 选球员 → 点击左侧属性锁定
+    </span>
+  </div>`;
+  
+  rosterArea.innerHTML = listHtml;
+}
+
+/** 当前球队内换一批球员 */
+function rerollTeamPlayers() {
+  if (STATE._rerollsLeft <= 0 || !STATE.currentTeam) return;
+  
+  const players = getCandidateRosterForTeam(STATE.currentTeam);
+  const available = players.filter(p => !STATE.usedPlayers.includes(p.name));
+  
+  const notShown = available.filter(p => !STATE._shownThisTeam.includes(p.name));
+  if (notShown.length === 0) {
+    return;
+  }
+  
+  STATE._rerollsLeft--;
+  const shuffled = shuffleArr([...notShown]);
+  const shown = shuffled.slice(0, Math.min(5, shuffled.length));
+  
+  shown.forEach(p => {
+    if (!STATE._shownThisTeam.includes(p.name)) STATE._shownThisTeam.push(p.name);
+  });
+  
+  STATE.selectedPlayer = null;
+  renderLeftAttrs();
+  updateSlotButtons();
+  renderRosterPlayers(STATE.currentTeam, shown, available);
+}
+
+function pickPlayer(name) {
+  
+  if (STATE._locking || !STATE.currentTeam) return;
+  const players = getCandidateRosterForTeam(STATE.currentTeam);
+  const player = players.find(p => p.name === name);
+  if (!player) return;
+  
+  STATE.selectedPlayer = player;
+  
+  document.querySelectorAll('.br-player').forEach(r => {
+    r.classList.toggle('selected', r.textContent.includes(player.cname || player.name));
+  });
+  
+  renderLeftAttrs();
+}
+
+function lockAttr(key) {
+  if (STATE._locking || !STATE.selectedPlayer || STATE.attrs[key] !== null) return;
+  STATE._locking = true;
+  
+  const player = STATE.selectedPlayer;
+  const rawVal = parseInt(player[key]) || 50;
+  
+  // 跨位置衰减计算
+  const playerPos = getPlayerMainPos(player);
+  const penalty = getPosPenalty(STATE.position, playerPos, key);
+  const adjustedVal = Math.round(rawVal * penalty);
+  
+  STATE.attrs[key] = adjustedVal;
+  STATE.attrSlots[key] = { player: player.name, team: STATE.currentTeam, value: adjustedVal, raw: rawVal, penalty: penalty };
+  STATE.lockedCount++;
+  STATE.usedPlayers.push(player.name);
+  STATE.selectedPlayer = null;
+  STATE._mustLockAfterSpin = false; // 已锁定属性，可以再次随机
+  
+  if (STATE.lockedCount >= 13) {
+    renderLeftAttrs();
+    renderProgress();
+    setTimeout(() => { STATE._locking = false; revealPlayer(); }, 500);
+    return;
+  }
+  
+  const g = getGrade(adjustedVal);
+  const penaltyMsg = penalty < 1.0 ? ` (原始${rawVal}×${penalty.toFixed(2)})` : '';
+  
+  setTimeout(() => {
+    STATE._locking = false;
+    // ★ 清空当前球队和阵容，强制用户重新随机
+    STATE.currentTeam = null;
+    STATE.selectedPlayer = null;
+    STATE._shownThisTeam = [];
+    const rosterArea = document.getElementById('br-roster-area');
+    if (rosterArea) rosterArea.innerHTML = '';
+    renderLeftAttrs();
+    updateSlotButtons();
+    renderProgress();
+  }, 700);
+}
+
+function showToast(msg) {
+  // Toast 已关闭
+}
+
+function unselectPlayer() {
+  STATE.selectedPlayer = null;
+  document.queryS
+
+--- FUNCTION rerollTeamPlayers ---
+function rerollTeamPlayers() {
+  if (STATE._rerollsLeft <= 0 || !STATE.currentTeam) return;
+  
+  const players = getCandidateRosterForTeam(STATE.currentTeam);
+  const available = players.filter(p => !STATE.usedPlayers.includes(p.name));
+  
+  const notShown = available.filter(p => !STATE._shownThisTeam.includes(p.name));
+  if (notShown.length === 0) {
+    return;
+  }
+  
+  STATE._rerollsLeft--;
+  const shuffled = shuffleArr([...notShown]);
+  const shown = shuffled.slice(0, Math.min(5, shuffled.length));
+  
+  shown.forEach(p => {
+    if (!STATE._shownThisTeam.includes(p.name)) STATE._shownThisTeam.push(p.name);
+  });
+  
+  STATE.selectedPlayer = null;
+  renderLeftAttrs();
+  updateSlotButtons();
+  renderRosterPlayers(STATE.currentTeam, shown, available);
+}
+
+function pickPlayer(name) {
+  
+  if (STATE._locking || !STATE.currentTeam) return;
+  const players = getCandidateRosterForTeam(STATE.currentTeam);
+  const player = players.find(p => p.name === name);
+  if (!player) return;
+  
+  STATE.selectedPlayer = player;
+  
+  document.querySelectorAll('.br-player').forEach(r => {
+    r.classList.toggle('selected', r.textContent.includes(player.cname || player.name));
+  });
+  
+  renderLeftAttrs();
+}
+
+function lockAttr(key) {
+  if (STATE._locking || !STATE.selectedPlayer || STATE.attrs[key] !== null) return;
+  STATE._locking = true;
+  
+  const player = STATE.selectedPlayer;
+  const rawVal = parseInt(player[key]) || 50;
+  
+  // 跨位置衰减计算
+  const playerPos = getPlayerMainPos(player);
+  const penalty = getPosPenalty(STATE.position, playerPos, key);
+  const adjustedVal = Math.round(rawVal * penalty);
+  
+  STATE.attrs[key] = adjustedVal;
+  STATE.attrSlots[key] = { player: player.name, team: STATE.currentTeam, value: adjustedVal, raw: rawVal, penalty: penalty };
+  STATE.lockedCount++;
+  STATE.usedPlayers.push(player.name);
+  STATE.selectedPlayer = null;
+  STATE._mustLockAfterSpin = false; // 已锁定属性，可以再次随机
+  
+  if (STATE.lockedCount >= 13) {
+    renderLeftAttrs();
+    renderProgress();
+    setTimeout(() => { STATE._locking = false; revealPlayer(); }, 500);
+    return;
+  }
+  
+  const g = getGrade(adjustedVal);
+  const penaltyMsg = penalty < 1.0 ? ` (原始${rawVal}×${penalty.toFixed(2)})` : '';
+  
+  setTimeout(() => {
+    STATE._locking = false;
+    // ★ 清空当前球队和阵容，强制用户重新随机
+    STATE.currentTeam = null;
+    STATE.selectedPlayer = null;
+    STATE._shownThisTeam = [];
+    const rosterArea = document.getElementById('br-roster-area');
+    if (rosterArea) rosterArea.innerHTML = '';
+    renderLeftAttrs();
+    updateSlotButtons();
+    renderProgress();
+  }, 700);
+}
+
+function showToast(msg) {
+  // Toast 已关闭
+}
+
+function unselectPlayer() {
+  STATE.selectedPlayer = null;
+  document.querySelectorAll('.roster-row').forEach(r => r.classList.remove('selected'));
+  html('player-info-area').innerHTML = '';
+  renderAttrSlots();
+}
+
+function confirmLock(playerName, attrKey, value) {
+  // 防止连点
+  if (STATE._locking) return;
+  STATE._locking = true;
+  
+  // 记录锁定
+  STATE.attrs[attrKey] = value;
+  STATE.attrSlots[attrKey] = { player: playerName, team: STATE.currentTeam, value };
+  STATE.lockedCount++;
+  STATE.usedPlayers.push(playerName);
+  STATE.selectedPlayer = null;
+  
+  // 清除球员信息
+  html('player-info-area').innerHTML = '';
+  
+  // 更新 UI
+  renderAttrSlots();
+  
+  if (STATE.lockedCount >= 13) {
+    revealPlayer();
+    return;
+  }
+  
+  // 显示成功提示并自动下一轮
+  html('roster-area').innerHTML = `<div class="locked-msg">
+    <div class="locked-icon">✅</div>
+    <div class="locked-title">${attrCN(attrKey)}（${value}）来自 ${playerName}</div>
+    <div class="locked-sub">${13 - STATE.lockedCount > 0 ? `剩余 ${13 - STATE.lockedCount} 项属性` : '全部属性已锁定！'} · 自动进入下一轮...</div>
+  </div>`;
+  
+  setTimeout(() => {
+    STATE._locking = false;
+    if (STATE.lockedCount < 13) {
+      html('roster-area').innerHTML = '';
+      spinTeam();
+    }
+  }, 1000);
+}
+
+// ==================== 4. 相似球员匹配 ====================
+function findSimilarPlayers(attrs, pos, topN = 3) {
+  const posAvg = SIM_CONFIG.POS_AVG[pos];
+  if (!posAvg) return [];
+  
+  // 用户属性相对位置平均值的偏差向量
+  const userVec = ATTR_KEYS.map(k => (attrs[k] || 50) - (posAvg[k] || 50));
+  const userNorm = Math.sqrt(userVec.reduce((s, v) => s + v * v, 1));
+  
+  // 遍历所有 NBA 球员
+  const scores = [];
+  NBA2K_TEAMS.forEach(team => {
+    (NBA2K_DATA[team] || []).forEach(player => {
+      // 该球员属性相对同一位置平均值的偏差向量
+      const hisVec = ATTR_KEYS.map(k => (parseInt(player[k]) || 50) - (posAvg[k] || 50));
+      const hisNorm = Math.sqrt(hisVec.reduce((s, v) => s + v * v, 1));
+  
+
+--- FUNCTION pickPlayer ---
+function pickPlayer(name) {
+  
+  if (STATE._locking || !STATE.currentTeam) return;
+  const players = getCandidateRosterForTeam(STATE.currentTeam);
+  const player = players.find(p => p.name === name);
+  if (!player) return;
+  
+  STATE.selectedPlayer = player;
+  
+  document.querySelectorAll('.br-player').forEach(r => {
+    r.classList.toggle('selected', r.textContent.includes(player.cname || player.name));
+  });
+  
+  renderLeftAttrs();
+}
+
+function lockAttr(key) {
+  if (STATE._locking || !STATE.selectedPlayer || STATE.attrs[key] !== null) return;
+  STATE._locking = true;
+  
+  const player = STATE.selectedPlayer;
+  const rawVal = parseInt(player[key]) || 50;
+  
+  // 跨位置衰减计算
+  const playerPos = getPlayerMainPos(player);
+  const penalty = getPosPenalty(STATE.position, playerPos, key);
+  const adjustedVal = Math.round(rawVal * penalty);
+  
+  STATE.attrs[key] = adjustedVal;
+  STATE.attrSlots[key] = { player: player.name, team: STATE.currentTeam, value: adjustedVal, raw: rawVal, penalty: penalty };
+  STATE.lockedCount++;
+  STATE.usedPlayers.push(player.name);
+  STATE.selectedPlayer = null;
+  STATE._mustLockAfterSpin = false; // 已锁定属性，可以再次随机
+  
+  if (STATE.lockedCount >= 13) {
+    renderLeftAttrs();
+    renderProgress();
+    setTimeout(() => { STATE._locking = false; revealPlayer(); }, 500);
+    return;
+  }
+  
+  const g = getGrade(adjustedVal);
+  const penaltyMsg = penalty < 1.0 ? ` (原始${rawVal}×${penalty.toFixed(2)})` : '';
+  
+  setTimeout(() => {
+    STATE._locking = false;
+    // ★ 清空当前球队和阵容，强制用户重新随机
+    STATE.currentTeam = null;
+    STATE.selectedPlayer = null;
+    STATE._shownThisTeam = [];
+    const rosterArea = document.getElementById('br-roster-area');
+    if (rosterArea) rosterArea.innerHTML = '';
+    renderLeftAttrs();
+    updateSlotButtons();
+    renderProgress();
+  }, 700);
+}
+
+function showToast(msg) {
+  // Toast 已关闭
+}
+
+function unselectPlayer() {
+  STATE.selectedPlayer = null;
+  document.querySelectorAll('.roster-row').forEach(r => r.classList.remove('selected'));
+  html('player-info-area').innerHTML = '';
+  renderAttrSlots();
+}
+
+function confirmLock(playerName, attrKey, value) {
+  // 防止连点
+  if (STATE._locking) return;
+  STATE._locking = true;
+  
+  // 记录锁定
+  STATE.attrs[attrKey] = value;
+  STATE.attrSlots[attrKey] = { player: playerName, team: STATE.currentTeam, value };
+  STATE.lockedCount++;
+  STATE.usedPlayers.push(playerName);
+  STATE.selectedPlayer = null;
+  
+  // 清除球员信息
+  html('player-info-area').innerHTML = '';
+  
+  // 更新 UI
+  renderAttrSlots();
+  
+  if (STATE.lockedCount >= 13) {
+    revealPlayer();
+    return;
+  }
+  
+  // 显示成功提示并自动下一轮
+  html('roster-area').innerHTML = `<div class="locked-msg">
+    <div class="locked-icon">✅</div>
+    <div class="locked-title">${attrCN(attrKey)}（${value}）来自 ${playerName}</div>
+    <div class="locked-sub">${13 - STATE.lockedCount > 0 ? `剩余 ${13 - STATE.lockedCount} 项属性` : '全部属性已锁定！'} · 自动进入下一轮...</div>
+  </div>`;
+  
+  setTimeout(() => {
+    STATE._locking = false;
+    if (STATE.lockedCount < 13) {
+      html('roster-area').innerHTML = '';
+      spinTeam();
+    }
+  }, 1000);
+}
+
+// ==================== 4. 相似球员匹配 ====================
+function findSimilarPlayers(attrs, pos, topN = 3) {
+  const posAvg = SIM_CONFIG.POS_AVG[pos];
+  if (!posAvg) return [];
+  
+  // 用户属性相对位置平均值的偏差向量
+  const userVec = ATTR_KEYS.map(k => (attrs[k] || 50) - (posAvg[k] || 50));
+  const userNorm = Math.sqrt(userVec.reduce((s, v) => s + v * v, 1));
+  
+  // 遍历所有 NBA 球员
+  const scores = [];
+  NBA2K_TEAMS.forEach(team => {
+    (NBA2K_DATA[team] || []).forEach(player => {
+      // 该球员属性相对同一位置平均值的偏差向量
+      const hisVec = ATTR_KEYS.map(k => (parseInt(player[k]) || 50) - (posAvg[k] || 50));
+      const hisNorm = Math.sqrt(hisVec.reduce((s, v) => s + v * v, 1));
+      
+      // 点积
+      let dot = 0;
+      for (let i = 0; i < ATTR_KEYS.length; i++) {
+        dot += userVec[i] * hisVec[i];
+      }
+      
+      // 余弦相似度（偏差向量）
+      const similarity = Math.round((dot / (userNorm * hisNorm)) * 100);
+      scores.push({ player, team, similarity });
+    });
+  });
+  
+  // 按相似度降序排列，取 Top N
+  scores.sort((a, b) => b.similarity - a.similarity);
+  return scores.slice(0, topN);
+}
+
+/** 模板匹配用名单：按当前模式取（生涯=现役，传奇=对应时代名单） */
+function getTemplateRosters() {
+  var teams = (typeof NBA2K_TEAMS !== 'undefined' ? NBA2K_TEAMS : []);
+  var isLegend = STATE && (STATE.mode === 'legend' || STATE.draftMode === 'historical');
+  return teams.map(function(t) {
+    var roster = (typeof NBA2K_ALLTIME_DATA !== 'undefined' && NBA2K_ALLTIME_DATA[t + '
+
+--- FUNCTION getPlayerMainPos ---
+function getPlayerMainPos(player) {
+  const pos = (player.pos || 'SG').split('/')[0].trim();
+  return (SIM_CONFIG.POS_AVG[pos] ? pos : 'SF');
+}
+// ==================== 初始化 ====================
+
+/** 安全返回赛季页面：重新渲染后再显示，防止状态异常 */
+function backToSeason() {
+  trackEvent({act:"click",blk:"BMC098",pos:"TC20",label:"返回赛季"});
+  const schedule = STATE.season?.schedule;
+  const hasGames = schedule && schedule.length > 0;
+  if (!hasGames) { showScreen('screen-menu'); return; }
+  // 重新渲染赛季UI确保状态同步
+  if (typeof renderSeasonUI === 'function') renderSeasonUI();
+  if (typeof renderCalendar === 'function') renderCalendar();
+  showScreen('screen-season');
+}
+
+/** 从 storage 读取上次保存的球员数据并输出到控制台 */
+function logSavedPlayerData() {
+  Storage.waitForReady().then(function() {
+    Storage.getValue('players').then(function(raw) {
+      if (raw == null) { console.log('📦 暂无保存的球员数据'); return; }
+      var arr = Array.isArray(raw) ? raw : (typeof raw === 'string' ? JSON.parse(raw) : null);
+      if (Array.isArray(arr) && arr.length > 0) {
+        console.log('📦 已保存的球员列表 (共' + arr.length + '个):');
+        arr.forEach(function(data, i) {
+          console.log('  #' + (i+1), '位置:', data.position, '| 球队:', data.team, '| OVR:', data.finalOVR, '| 属性:', data.attrs);
+        });
+      } else { console.log('📦 暂无保存的球员数据'); }
+    });
+  });
+}
+setTimeout(logSavedPlayerData, 500);
+
+/** 验证 ColorboxAI.storage 读写回路 */
+function verifyStorage() {
+  Storage.waitForReady().then(function(){
+    Storage.setValue({ _ping: 'pong' }).then(function(){
+      Storage.getValue('_ping').then(function(v){
+        console.log('[StorageTest] setValue/getValue 回路:', v === 'pong' ? '✅ 通过' : '❌ 失败', v);
+      });
+    });
+  });
+}
+setTimeout(verifyStorage, 1000);
+
+/** 生成全局唯一游戏局ID */
+function generateGameId() {
+  return Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) + '-' + Math.random().toString(36).slice(2, 6);
+}
+
+var _baseLeagueRosterSnapshot = null;
+
+function cloneLeagueData(obj) {
+  return JSON.parse(JSON.stringify(obj || {}));
+}
+
+function captureBaseLeagueRoster() {
+  if (_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
+  _baseLeagueRosterSnapshot = {};
+  NBA2K_TEAMS.forEach(function(t) {
+    _baseLeagueRosterSnapshot[t] = cloneLeagueData(NBA2K_DATA[t] || []);
+  });
+}
+
+function restoreBaseLeagueRoster() {
+  captureBaseLeagueRoster();
+  if (!_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
+  NBA2K_TEAMS.forEach(function(t) {
+    NBA2K_DATA[t] = cloneLeagueData(_baseLeagueRosterSnapshot[t] || []);
+  });
+  delete NBA2K_DATA._draftClass2026Applied;
+}
+
+function createFreshCareer() {
+  return {
+    seasonCount: 0,
+    currentAge: 22,
+    contract: 4,
+    seasons: [],
+    totalStats: { pts:0, reb:0, ast:0, stl:0, blk:0, tov:0, fgm:0, fga:0, ftm:0, fta:0, threeM:0, threeA:0, games:0, mins:0 },
+    playoffStats: { pts:0, reb:0, ast:0, stl:0, blk:0, tov:0, fgm:0, fga:0, ftm:0, fta:0, threeM:0, threeA:0, games:0, mins:0 },
+    honors: [],
+    offseasonHistory: [],
+    branchHistory: [],
+    branches: {},
+    profile: { fame:0, businessValue:0, mediaTrust:0, controversy:0, chinaPopularity:0, loyalty:0, leadership:0, coachTrust:0, lockerRoomTrust:0, fanSupport:0, legacyBonus:0 },
+    relationships: {},
+    flags: {},
+    draft: null,
+    mobility: null,
+    nextSeasonMods: { injuryRiskBonus:0, formVariance:0, teamChemistry:0, moraleBonus:0, mediaPressure:0, staminaLoad:0 },
+    annualChangeSeason: 0,
+    offseasonEventSeason: 0
+  };
+}
+
+function initGame() {
+  restoreBaseLeagueRoster();
+  _rngState = null;
+  _rookieNameSeq = 0;
+  // 重置状态（保留 gameId 持久不变，直到下一次显式重置）
+  Object.assign(STATE, {
+    mode: null, position: null,
+    attrs: {}, attrSlots: {}, lockedCount: 0,
+    usedPlayers: [], _mustLockAfterSpin: false,
+    buildStep: 'select', noPlayerSelected: true,
+    currentTeam: null, currentRoster: [],
+    _shownThisTeam: [], _rerollsLeft: 3, _teamsVisited: [],
+    selectedPlayer: null, _locking: false,
+    finalOVR: 0, finalPosition: null, finalArchetype: null,
+    careerTeam: null,
+    gameId: generateGameId(),
+    career: createFreshCareer(),
+    season: { games: [], wins: 0, losses: 0, playerStats: {}, playoffStats: { pts:0, reb:0, ast:0, stl:0, blk:0, tov:0, fgm:0, fga:0, ftm:0, fta:0, threeM:0, threeA:0, mins:0, games:0 }, awards: [], playoffResult: null, playoffEliminated: false, standings: {}, isPlayoffs: false, playoffBracket: null, otherBracket: nu
+
+--- FUNCTION getPosPenalty ---
+function getPosPenalty(userPos, srcPos, attrKey) {
+  const srcAvg = SIM_CONFIG.POS_AVG[srcPos] && SIM_CONFIG.POS_AVG[srcPos][attrKey];
+  const userAvg = SIM_CONFIG.POS_AVG[userPos] && SIM_CONFIG.POS_AVG[userPos][attrKey];
+  if (!srcAvg || srcAvg <= 0) return 1.0;
+  const normal = Math.min(1.0, userAvg / srcAvg);
+  if (STATE.mode === 'legend') return 1.0 - (1.0 - normal) * 0.3;
+  return normal;
+}
+
+/** 从球员的 pos 字段提取主位置（'PG / SG' → 'PG'） */
+function getPlayerMainPos(player) {
+  const pos = (player.pos || 'SG').split('/')[0].trim();
+  return (SIM_CONFIG.POS_AVG[pos] ? pos : 'SF');
+}
+// ==================== 初始化 ====================
+
+/** 安全返回赛季页面：重新渲染后再显示，防止状态异常 */
+function backToSeason() {
+  trackEvent({act:"click",blk:"BMC098",pos:"TC20",label:"返回赛季"});
+  const schedule = STATE.season?.schedule;
+  const hasGames = schedule && schedule.length > 0;
+  if (!hasGames) { showScreen('screen-menu'); return; }
+  // 重新渲染赛季UI确保状态同步
+  if (typeof renderSeasonUI === 'function') renderSeasonUI();
+  if (typeof renderCalendar === 'function') renderCalendar();
+  showScreen('screen-season');
+}
+
+/** 从 storage 读取上次保存的球员数据并输出到控制台 */
+function logSavedPlayerData() {
+  Storage.waitForReady().then(function() {
+    Storage.getValue('players').then(function(raw) {
+      if (raw == null) { console.log('📦 暂无保存的球员数据'); return; }
+      var arr = Array.isArray(raw) ? raw : (typeof raw === 'string' ? JSON.parse(raw) : null);
+      if (Array.isArray(arr) && arr.length > 0) {
+        console.log('📦 已保存的球员列表 (共' + arr.length + '个):');
+        arr.forEach(function(data, i) {
+          console.log('  #' + (i+1), '位置:', data.position, '| 球队:', data.team, '| OVR:', data.finalOVR, '| 属性:', data.attrs);
+        });
+      } else { console.log('📦 暂无保存的球员数据'); }
+    });
+  });
+}
+setTimeout(logSavedPlayerData, 500);
+
+/** 验证 ColorboxAI.storage 读写回路 */
+function verifyStorage() {
+  Storage.waitForReady().then(function(){
+    Storage.setValue({ _ping: 'pong' }).then(function(){
+      Storage.getValue('_ping').then(function(v){
+        console.log('[StorageTest] setValue/getValue 回路:', v === 'pong' ? '✅ 通过' : '❌ 失败', v);
+      });
+    });
+  });
+}
+setTimeout(verifyStorage, 1000);
+
+/** 生成全局唯一游戏局ID */
+function generateGameId() {
+  return Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) + '-' + Math.random().toString(36).slice(2, 6);
+}
+
+var _baseLeagueRosterSnapshot = null;
+
+function cloneLeagueData(obj) {
+  return JSON.parse(JSON.stringify(obj || {}));
+}
+
+function captureBaseLeagueRoster() {
+  if (_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
+  _baseLeagueRosterSnapshot = {};
+  NBA2K_TEAMS.forEach(function(t) {
+    _baseLeagueRosterSnapshot[t] = cloneLeagueData(NBA2K_DATA[t] || []);
+  });
+}
+
+function restoreBaseLeagueRoster() {
+  captureBaseLeagueRoster();
+  if (!_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
+  NBA2K_TEAMS.forEach(function(t) {
+    NBA2K_DATA[t] = cloneLeagueData(_baseLeagueRosterSnapshot[t] || []);
+  });
+  delete NBA2K_DATA._draftClass2026Applied;
+}
+
+function createFreshCareer() {
+  return {
+    seasonCount: 0,
+    currentAge: 22,
+    contract: 4,
+    seasons: [],
+    totalStats: { pts:0, reb:0, ast:0, stl:0, blk:0, tov:0, fgm:0, fga:0, ftm:0, fta:0, threeM:0, threeA:0, games:0, mins:0 },
+    playoffStats: { pts:0, reb:0, ast:0, stl:0, blk:0, tov:0, fgm:0, fga:0, ftm:0, fta:0, threeM:0, threeA:0, games:0, mins:0 },
+    honors: [],
+    offseasonHistory: [],
+    branchHistory: [],
+    branches: {},
+    profile: { fame:0, businessValue:0, mediaTrust:0, controversy:0, chinaPopularity:0, loyalty:0, leadership:0, coachTrust:0, lockerRoomTrust:0, fanSupport:0, legacyBonus:0 },
+    relationships: {},
+    flags: {},
+    draft: null,
+    mobility: null,
+    nextSeasonMods: { injuryRiskBonus:0, formVariance:0, teamChemistry:0, moraleBonus:0, mediaPressure:0, staminaLoad:0 },
+    annualChangeSeason: 0,
+    offseasonEventSeason: 0
+  };
+}
+
+function initGame() {
+  restoreBaseLeagueRoster();
+  _rngState = null;
+  _rookieNameSeq = 0;
+  // 重置状态（保留 gameId 持久不变，直到下一次显式重置）
+  Object.assign(STATE, {
+    mode: null, position: null,
+    attrs: {}, attrSlots: {}, lockedCount: 0,
+    usedPlayers: [], _mustLockAfterSpin: false,
+    buildStep: 'select', noPlayerSelected: true,
+    currentTeam: null, currentRoster: [],
+    _shownThisTeam: [], _rerollsLeft: 3, _teamsVisited: [],
+    selectedPlayer: null, _locking: false,
+    finalOVR: 0, fina
+
+--- FUNCTION calcOVR ---
+function calcOVR(attrs, pos) {
+  var weights = SIM_CONFIG && SIM_CONFIG.OVR_WEIGHTS ? SIM_CONFIG.OVR_WEIGHTS[pos || STATE.position] : null;
+  if (weights) {
+    var weighted = 0;
+    ATTR_KEYS.forEach(function(k) {
+      weighted += ((attrs && attrs[k] != null) ? attrs[k] : 50) * (weights[k] || 0.07);
+    });
+    return Math.round(weighted);
+  }
+  var sum = 0, count = 0;
+  ATTR_KEYS.forEach(function(k) {
+    if (attrs && attrs[k] != null) { sum += attrs[k]; count++; }
+  });
+  return count > 0 ? Math.round(sum / count) : 50;
+}
+
+// ==================== 联盟演变 ====================
+var _playerAges = null;
+var _playerGenes = null;
+
+function loadPlayerAges() {
+  if (_playerAges) return;
+  _playerAges = {};
+  _playerGenes = {};
+  try {
+    var data = document.getElementById('player-age-data');
+    if (data) {
+      var rows = JSON.parse(data.textContent);
+      rows.forEach(function(r) {
+        _playerAges[r.n] = r.a;
+        _playerGenes[r.n] = { v: r.v || (1 + Math.floor(rngNext() * 4)), l: r.l || (1 + Math.floor(rngNext() * 4)) };
+      });
+    }
+  } catch(e) {}
+}
+
+function getPlayerAge(playerName) {
+  loadPlayerAges();
+  if (isLeBronJamesPlayer(playerName)) return LEBRON_JAMES_SPECIAL_RULE.initialAge;
+  return _playerAges && _playerAges[playerName] ? _playerAges[playerName] : null;
+}
+
+function getPlayerGene(playerName) {
+  loadPlayerAges();
+  if (_playerGenes && _playerGenes[playerName]) return _playerGenes[playerName];
+  var g = { v: 1 + Math.floor(rngNext() * 4), l: 1 + Math.floor(rngNext() * 4) };
+  if (_playerGenes) _playerGenes[playerName] = g;
+  return g;
+}
+
+function inferAge(playerName, ovr) {
+  if (isLeBronJamesPlayer(playerName)) return LEBRON_JAMES_SPECIAL_RULE.initialAge;
+  if (ovr >= 90) return 28;
+  if (ovr >= 80) return 26;
+  if (ovr >= 70) return 24;
+  return 22;
+}
+
+var LEBRON_JAMES_SPECIAL_RULE = {
+  initialAge: 40,
+  protectedRetirementAge: 65
+};
+
+function normalizePlayerIdentityKey(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function isLeBronJamesPlayer(player) {
+  var names = [];
+  if (typeof player === 'string') {
+    names.push(player);
+  } else if (player) {
+    names.push(player.name, player.nameEN, player.slug, player.id, player.playerId, player.cname);
+  }
+  for (var i = 0; i < names.length; i++) {
+    var key = normalizePlayerIdentityKey(names[i]);
+    if (key === 'lebron-james' || key === 'lebron') return true;
+  }
+  return false;
+}
+
+function getLeaguePlayerAge(player) {
+  if (player && typeof player._age === 'number') return player._age;
+  var age = isLeBronJamesPlayer(player)
+    ? LEBRON_JAMES_SPECIAL_RULE.initialAge
+    : (getPlayerAge(player && player.name) || inferAge(player && player.name, player && player.ovr));
+  if (player) player._age = age;
+  return age;
+}
+
+function advanceSpecialLeaguePlayerAge(player, age) {
+  if (isLeBronJamesPlayer(player)) player._specialAge = (age || LEBRON_JAMES_SPECIAL_RULE.initialAge) + 1;
+}
+
+function evolveLeague() {
+  STATE._leagueChanges = { retired: [], rookies: [], teamChanges: {}, trades: [] };
+  var teams = typeof NBA2K_TEAMS !== 'undefined' ? NBA2K_TEAMS : [];
+  teams.forEach(function(t) {
+    var roster = NBA2K_DATA[t];
+    if (!roster || !roster.length) return;
+    STATE._leagueChanges.teamChanges[t] = { before: roster.length, retired: [], rookies: [] };
+    var newRoster = [];
+    roster.forEach(function(p) {
+      var age = getLeaguePlayerAge(p);
+      var gene = getPlayerGene(p.name);
+      var volatility = gene.v;
+      var ageFactor = 0;
+      if (age <= 22) ageFactor = 1 + rngNext() * 1.5;
+      else if (age <= 28) ageFactor = (rngNext() - 0.5) * 1.5;
+      else if (age <= 33) ageFactor = -1 - rngNext() * 1.5;
+      else ageFactor = -2 - rngNext() * 2;
+      var volFactor = (rngNext() - 0.5) * volatility * 0.6;
+      var randFactor = (rngNext() - 0.5) * 1.5;
+      var change = ageFactor * 0.5 + volFactor * 0.3 + randFactor * 0.2;
+      if (isMvpStar(p) && age <= 26) change += 0.6 + rngNext() * 0.8; // 重点新秀成长加速
+      change = Math.round(change * 2) / 2;
+      var newOvr = Math.max(55, Math.min(99, p.ovr + change));
+      if (newOvr !== p.ovr) {
+        var ratio = Math.round(newOvr) / p.ovr;
+        SIM_CONFIG.ATTR_LIST.forEach(function(attrKey) {
+          if (p[attrKey] != null) p[attrKey] = Math.max(25, Math.min(99, Math.round(p[attrKey] * ratio)));
+        });
+        p.ovr = Math.round(newOvr);
+      }
+      var retireChance = 0;
+      if (isLeBronJamesPlayer(
+
+--- JS URLS ---
+https://activity-static.hoopchina.com.cn/colorbox-activities/js/kaleido-fed-sdk.js
+https://activity-static.hoopchina.com.cn/files/26630-uq56cnrc-upload-1782786826635-12.js
+https://activity-static.hoopchina.com.cn/files/26716-pz0d55rc-upload-1784184998973-30.js
+https://activity-static.hoopchina.com.cn/files/26728-c65ifqrc-upload-1785209154529-12.js
+https://activity-static.hoopchina.com.cn/files/2678-58zyeprc-upload-1783508428855-12.js
+https://activity-static.hoopchina.com.cn/files/2678-5hu3djrc-upload-1783494754597-12.js
+https://activity-static.hoopchina.com.cn/files/2678-gd4jvxrc-upload-1783494754597-15.js
+https://activity-static.hoopchina.com.cn/files/2678-mdo4zerc-upload-1783494754597-21.js
+https://activity-static.hoopchina.com.cn/files/2678-qlg35lrc-upload-1783494754597-24.js
+https://activity-static.hoopchina.com.cn/files/26818-49y4h9rc-upload-1787017253393-24.js
+https://activity-static.hoopchina.com.cn/files/26818-8910gprc-upload-1787017253393-21.js
+https://activity-static.hoopchina.com.cn/files/26818-em3jrwrc-upload-1787017253393-18.js
+https://activity-static.hoopchina.com.cn/files/26818-iuqumlrc-upload-1787017253393-12.js
+https://activity-static.hoopchina.com.cn/files/26818-q7jpskrc-upload-1787017253393-15.js
+https://activity-static.hoopchina.com.cn/files/26818-u53b5lrc-upload-1787017253393-27.js
+https://activity-static.hoopchina.com.cn/files/26819-mm0owcrc-upload-1787104416942-22.js
+https://activity-static.hoopchina.com.cn/files/26820-bl5wl3rc-upload-1787191261005-12.js
+https://activity-static.hoopchina.com.cn/files/26821-qmhwwcrc-upload-1787293968768-12.js
+https://activity-static.hoopchina.com.cn/games/static/colorbox-ai/colorbox-ai_v2.1.73.js
+https://activity-static.hoopchina.com.cn/hupu-web-guard.js
+https://gosspublic.alicdn.com/aliyun-oss-sdk-6.17.1.min.js

@@ -9,10 +9,28 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: perfect-player-legend-inspect-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   inspect:
     runs-on: ubuntu-latest
     steps:
+      - name: Mark inspection running
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          FILE='debug/perfect-legend-status.txt'
+          BODY=$(printf 'status=running\nrun_id=%s\nsource_commit=%s\n' "$GITHUB_RUN_ID" "$GITHUB_SHA")
+          B64=$(printf '%s' "$BODY" | base64 -w0)
+          OLD_SHA=$(gh api "repos/$GITHUB_REPOSITORY/contents/$FILE?ref=$GITHUB_REF_NAME" --jq '.sha' 2>/dev/null || true)
+          if [ -n "$OLD_SHA" ]; then
+            gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Mark legend inspection running' -f content="$B64" -f sha="$OLD_SHA" -f branch="$GITHUB_REF_NAME" >/dev/null
+          else
+            gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Mark legend inspection running' -f content="$B64" -f branch="$GITHUB_REF_NAME" >/dev/null
+          fi
       - name: Fetch and inspect latest H5
         env:
           GH_TOKEN: ${{ github.token }}
@@ -24,32 +42,24 @@ jobs:
           from pathlib import Path
           import re
           s=Path('/tmp/perfect.html').read_text(encoding='utf-8',errors='replace')
-          out=[]
-          out.append('SIZE='+str(len(s)))
-          pats=[
-            r'传奇模式', r"mode\s*[:=]\s*['\"]legend['\"]", r"STATE\.mode[^\n]{0,120}",
-            r'LEGEND[A-Za-z0-9_]*', r'[A-Za-z0-9_]*LEGEND[A-Za-z0-9_]*',
-            r'legend[A-Za-z0-9_]*', r'[A-Za-z0-9_]*legend[A-Za-z0-9_]*',
-            r'NBA2K_[A-Za-z0-9_]+', r'[A-Za-z0-9_]+_DATA', r'[A-Za-z0-9_]+_TEAMS'
-          ]
+          out=['SIZE='+str(len(s))]
+          pats=[r'传奇模式',r"mode\s*[:=]\s*['\"]legend['\"]",r"STATE\.mode[^\n]{0,160}",r'LEGEND[A-Za-z0-9_]*',r'[A-Za-z0-9_]*LEGEND[A-Za-z0-9_]*',r'legend[A-Za-z0-9_]*',r'NBA2K_[A-Za-z0-9_]+',r'[A-Za-z0-9_]+_DATA',r'[A-Za-z0-9_]+_TEAMS']
           seen=set()
           for pat in pats:
             for m in re.finditer(pat,s,re.I):
-              a=max(0,m.start()-500); b=min(len(s),m.end()+900)
+              a=max(0,m.start()-700); b=min(len(s),m.end()+1300)
               chunk=s[a:b].replace('\r','')
-              key=chunk[:200]
+              key=chunk[:250]
               if key in seen: continue
-              seen.add(key)
-              out.append('\n--- MATCH '+pat+' @ '+str(m.start())+' ---\n'+chunk)
-              if len(out)>120: break
-            if len(out)>120: break
-          # Script URLs and variable declarations mentioning legend/current/player pool
+              seen.add(key); out.append('\n--- MATCH '+pat+' @ '+str(m.start())+' ---\n'+chunk)
+              if len(out)>160: break
+            if len(out)>160: break
           urls=sorted(set(re.findall(r'https://[^\"\'<> ]+?\.js(?:\?[^\"\'<> ]*)?',s)))
           out.append('\n--- JS URLS ---\n'+'\n'.join(urls))
           for name in ['renderModeSelect','startGame','renderPositionSelect','spinTeam','renderRosterPlayers','pickPlayer','getPlayerMainPos','getPosPenalty','calcOVR']:
             idx=s.find('function '+name)
-            if idx>=0: out.append('\n--- FUNCTION '+name+' ---\n'+s[idx:idx+5000])
-          Path('/tmp/inspect.txt').write_text('\n'.join(out)[:900000],encoding='utf-8')
+            if idx>=0: out.append('\n--- FUNCTION '+name+' ---\n'+s[idx:idx+6500])
+          Path('/tmp/inspect.txt').write_text('\n'.join(out)[:950000],encoding='utf-8')
           PY
           FILE='debug/perfect-legend-inspect.txt'
           BODY=$(base64 -w0 /tmp/inspect.txt)
@@ -59,3 +69,7 @@ jobs:
           else
             gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Inspect latest Perfect Player legend mode' -f content="$BODY" -f branch="$GITHUB_REF_NAME" >/dev/null
           fi
+          STATUS=$(printf 'status=success\nrun_id=%s\nsource_commit=%s\n' "$GITHUB_RUN_ID" "$GITHUB_SHA" | base64 -w0)
+          SFILE='debug/perfect-legend-status.txt'
+          SSHA=$(gh api "repos/$GITHUB_REPOSITORY/contents/$SFILE?ref=$GITHUB_REF_NAME" --jq '.sha')
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$SFILE" -f message='[skip ci] Mark legend inspection success' -f content="$STATUS" -f sha="$SSHA" -f branch="$GITHUB_REF_NAME" >/dev/null

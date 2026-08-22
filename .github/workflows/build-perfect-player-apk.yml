@@ -47,21 +47,25 @@ jobs:
           python3 tools/patch_perfect_player_apk.py /tmp/perfect.html "$ASSETS"
           grep -q '更换球员 · 免费∞' "$ASSETS/index.html"
           grep -q '30队免费任选' "$ASSETS/index.html"
+          grep -q 'const BEST_BUILDS = {' "$ASSETS/index.html"
+          grep -q '⚡ 一键最强' "$ASSETS/index.html"
+          grep -q 'function applyBestBuild(pos)' "$ASSETS/index.html"
           grep -q "applicationId 'com.tealigantal.perfectplayer'" android-perfect-player/app/build.gradle
+          grep -q "versionCode 2" android-perfect-player/app/build.gradle
           grep -q 'file:///android_asset/index.html' android-perfect-player/app/src/main/java/com/tealigantal/perfectplayer/MainActivity.java
       - name: Build APK
         run: gradle -p android-perfect-player assembleDebug --stacktrace
       - name: Prepare release
         run: |
-          cp android-perfect-player/app/build/outputs/apk/debug/app-debug.apk Perfect-Player-Free.apk
-          sha256sum Perfect-Player-Free.apk
+          cp android-perfect-player/app/build/outputs/apk/debug/app-debug.apk Perfect-Player-OneClick.apk
+          sha256sum Perfect-Player-OneClick.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: perfect-player-free-apk
-          path: Perfect-Player-Free.apk
+          name: perfect-player-oneclick-apk
+          path: Perfect-Player-OneClick.apk
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete perfect-player-free-v1 --yes --cleanup-tag || true
-          gh release create perfect-player-free-v1 Perfect-Player-Free.apk --target "$GITHUB_SHA" --title "我创造的完美球员 · 独立版 v1" --notes "独立 Android APK；包名 com.tealigantal.perfectplayer，可与挑战传奇同时安装；换球员永久免费无限；生涯球队30队免费任选。"
+          gh release delete perfect-player-free-v2 --yes --cleanup-tag || true
+          gh release create perfect-player-free-v2 Perfect-Player-OneClick.apk --target "$GITHUB_SHA" --title "我创造的完美球员 · 一键最强 v2" --notes "独立 Android APK；包名 com.tealigantal.perfectplayer，不会覆盖挑战传奇；PG/SG/SF/PF/C 均增加一键最强；保留免费无限换球员与30队免费任选。"

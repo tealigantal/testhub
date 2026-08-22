@@ -1,3 +1,3 @@
-status=running
+status=success
 run_id=32606407722
 source_commit=7509f7309aeac8c0b54e871a58a633fad367f851

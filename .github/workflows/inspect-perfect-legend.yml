@@ -42,24 +42,25 @@ jobs:
           from pathlib import Path
           import re
           s=Path('/tmp/perfect.html').read_text(encoding='utf-8',errors='replace')
-          out=['SIZE='+str(len(s))]
-          pats=[r'传奇模式',r"mode\s*[:=]\s*['\"]legend['\"]",r"STATE\.mode[^\n]{0,160}",r'LEGEND[A-Za-z0-9_]*',r'[A-Za-z0-9_]*LEGEND[A-Za-z0-9_]*',r'legend[A-Za-z0-9_]*',r'NBA2K_[A-Za-z0-9_]+',r'[A-Za-z0-9_]+_DATA',r'[A-Za-z0-9_]+_TEAMS']
-          seen=set()
-          for pat in pats:
-            for m in re.finditer(pat,s,re.I):
-              a=max(0,m.start()-700); b=min(len(s),m.end()+1300)
-              chunk=s[a:b].replace('\r','')
-              key=chunk[:250]
-              if key in seen: continue
-              seen.add(key); out.append('\n--- MATCH '+pat+' @ '+str(m.start())+' ---\n'+chunk)
-              if len(out)>160: break
-            if len(out)>160: break
+          lines=s.splitlines()
+          out=['SIZE='+str(len(s)), 'LINES='+str(len(lines))]
+          # compact relevant lines
+          keys=('传奇模式','legend','LEGEND','STATE.mode','NBA2K_','_DATA','_TEAMS','currentData','legendData','playerPool','PLAYER_POOL')
+          hits=[]
+          for i,line in enumerate(lines,1):
+            if any(k in line for k in keys):
+              hits.append(f'{i}: '+line[:900])
+              if len(hits)>=500: break
+          out.append('\n--- RELEVANT LINES ---\n'+'\n'.join(hits))
+          # exact core function snippets
+          for name in ['renderModeSelect','startGame','renderPositionSelect','startBuild','spinTeam','renderRosterPlayers','rerollTeamPlayers','pickPlayer','getPlayerMainPos','getPosPenalty','calcOVR']:
+            idx=s.find('function '+name)
+            if idx>=0: out.append('\n--- FUNCTION '+name+' ---\n'+s[idx:idx+4500])
+          # external js URLs
           urls=sorted(set(re.findall(r'https://[^\"\'<> ]+?\.js(?:\?[^\"\'<> ]*)?',s)))
           out.append('\n--- JS URLS ---\n'+'\n'.join(urls))
-          for name in ['renderModeSelect','startGame','renderPositionSelect','spinTeam','renderRosterPlayers','pickPlayer','getPlayerMainPos','getPosPenalty','calcOVR']:
-            idx=s.find('function '+name)
-            if idx>=0: out.append('\n--- FUNCTION '+name+' ---\n'+s[idx:idx+6500])
-          Path('/tmp/inspect.txt').write_text('\n'.join(out)[:950000],encoding='utf-8')
+          text='\n'.join(out)
+          Path('/tmp/inspect.txt').write_text(text[:180000],encoding='utf-8')
           PY
           FILE='debug/perfect-legend-inspect.txt'
           BODY=$(base64 -w0 /tmp/inspect.txt)

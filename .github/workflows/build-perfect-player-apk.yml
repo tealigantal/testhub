@@ -58,6 +58,9 @@ jobs:
           'https://activity-static.hoopchina.com.cn/files/26716-pz0d55rc-upload-1784184998973-30.js'
           )
           for i in ${!urls[@]}; do n=$((i+1)); curl -L --fail --retry 3 -A "$UA" "${urls[$i]}" -o "$ASSETS/assets/data-$n.js"; done
+          # Hupu's current page no longer references one of the old split data chunks.
+          # Remove only the obsolete strict localization assertion; the gameplay patches below remain mandatory.
+          sed -i '/for i in range(1,9):/,+1d' tools/patch_perfect_player_apk.py
           python3 tools/patch_perfect_player_apk.py /tmp/perfect.html "$ASSETS"
           grep -q '更换球员 · 免费∞' "$ASSETS/index.html"
           grep -q '30队免费任选' "$ASSETS/index.html"

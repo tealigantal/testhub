@@ -22,11 +22,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          FILE='build-status/perfect-player-v2.txt'
-          BODY=$(printf 'status=running\nrun_id=%s\nrelease=https://github.com/%s/releases/download/perfect-player-free-v2/Perfect-Player-OneClick.apk\nsource_commit=%s\n' "$GITHUB_RUN_ID" "$GITHUB_REPOSITORY" "$GITHUB_SHA")
+          FILE='build-status/perfect-player-v3.txt'
+          BODY=$(printf 'status=running\nrun_id=%s\nrelease=https://github.com/%s/releases/download/perfect-player-free-v3/Perfect-Player-AllMode-OneClick.apk\nsource_commit=%s\n' "$GITHUB_RUN_ID" "$GITHUB_REPOSITORY" "$GITHUB_SHA")
           B64=$(printf '%s' "$BODY" | base64 -w0)
           OLD_SHA=$(gh api "repos/$GITHUB_REPOSITORY/contents/$FILE?ref=$GITHUB_REF_NAME" --jq '.sha')
-          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Mark Perfect Player v2 build running' -f content="$B64" -f sha="$OLD_SHA" -f branch="$GITHUB_REF_NAME" >/dev/null
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Mark Perfect Player v3 build running' -f content="$B64" -f sha="$OLD_SHA" -f branch="$GITHUB_REF_NAME" >/dev/null
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
@@ -58,42 +58,42 @@ jobs:
           'https://activity-static.hoopchina.com.cn/files/26716-pz0d55rc-upload-1784184998973-30.js'
           )
           for i in ${!urls[@]}; do n=$((i+1)); curl -L --fail --retry 3 -A "$UA" "${urls[$i]}" -o "$ASSETS/assets/data-$n.js"; done
-          # Hupu's current page no longer references one of the old split data chunks.
-          # Remove only the obsolete strict localization assertion; the gameplay patches below remain mandatory.
           sed -i '/for i in range(1,9):/,+1d' tools/patch_perfect_player_apk.py
           python3 tools/patch_perfect_player_apk.py /tmp/perfect.html "$ASSETS"
+          python3 tools/patch_perfect_allmode_oneclick.py "$ASSETS/index.html"
           grep -q '更换球员 · 免费∞' "$ASSETS/index.html"
           grep -q '30队免费任选' "$ASSETS/index.html"
-          grep -q 'const BEST_BUILDS = {' "$ASSETS/index.html"
           grep -q '⚡ 一键最强' "$ASSETS/index.html"
-          grep -q 'function applyBestBuild(pos)' "$ASSETS/index.html"
+          grep -q 'allmode-oneclick-v3' "$ASSETS/index.html"
+          grep -q "legendPool:'NBA2K_ALLTIME_DATA\[\*_HIST\]'" "$ASSETS/index.html"
+          grep -q 'function ocHungarian' "$ASSETS/index.html"
           grep -q "applicationId 'com.tealigantal.perfectplayer'" android-perfect-player/app/build.gradle
-          grep -q "versionCode 2" android-perfect-player/app/build.gradle
+          grep -q "versionCode 3" android-perfect-player/app/build.gradle
           grep -q 'file:///android_asset/index.html' android-perfect-player/app/src/main/java/com/tealigantal/perfectplayer/MainActivity.java
       - name: Build APK
         run: gradle -p android-perfect-player assembleDebug --stacktrace
       - name: Prepare release
         run: |
-          cp android-perfect-player/app/build/outputs/apk/debug/app-debug.apk Perfect-Player-OneClick.apk
-          sha256sum Perfect-Player-OneClick.apk
+          cp android-perfect-player/app/build/outputs/apk/debug/app-debug.apk Perfect-Player-AllMode-OneClick.apk
+          sha256sum Perfect-Player-AllMode-OneClick.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: perfect-player-oneclick-apk
-          path: Perfect-Player-OneClick.apk
+          name: perfect-player-allmode-oneclick-apk
+          path: Perfect-Player-AllMode-OneClick.apk
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete perfect-player-free-v2 --yes --cleanup-tag || true
-          gh release create perfect-player-free-v2 Perfect-Player-OneClick.apk --target "$GITHUB_SHA" --title "我创造的完美球员 · 一键最强 v2" --notes "独立 Android APK；包名 com.tealigantal.perfectplayer，不会覆盖挑战传奇；PG/SG/SF/PF/C 均增加一键最强；保留免费无限换球员与30队免费任选。"
+          gh release delete perfect-player-free-v3 --yes --cleanup-tag || true
+          gh release create perfect-player-free-v3 Perfect-Player-AllMode-OneClick.apk --target "$GITHUB_SHA" --title "我创造的完美球员 · 全模式一键最强 v3" --notes "独立 Android APK；包名 com.tealigantal.perfectplayer，不会覆盖挑战传奇；现役与传奇模式的 PG/SG/SF/PF/C 均支持一键最强；传奇模式动态从 NBA2K_ALLTIME_DATA 历史名宿池求解最优13属性组合；保留免费无限换球员与30队免费任选。"
       - name: Mark successful build
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          FILE='build-status/perfect-player-v2.txt'
-          APK_SHA=$(sha256sum Perfect-Player-OneClick.apk | awk '{print $1}')
-          BODY=$(printf 'status=success\nrun_id=%s\nrelease=https://github.com/%s/releases/download/perfect-player-free-v2/Perfect-Player-OneClick.apk\napk_sha256=%s\nsource_commit=%s\n' "$GITHUB_RUN_ID" "$GITHUB_REPOSITORY" "$APK_SHA" "$GITHUB_SHA")
+          FILE='build-status/perfect-player-v3.txt'
+          APK_SHA=$(sha256sum Perfect-Player-AllMode-OneClick.apk | awk '{print $1}')
+          BODY=$(printf 'status=success\nrun_id=%s\nrelease=https://github.com/%s/releases/download/perfect-player-free-v3/Perfect-Player-AllMode-OneClick.apk\napk_sha256=%s\nsource_commit=%s\n' "$GITHUB_RUN_ID" "$GITHUB_REPOSITORY" "$APK_SHA" "$GITHUB_SHA")
           B64=$(printf '%s' "$BODY" | base64 -w0)
           OLD_SHA=$(gh api "repos/$GITHUB_REPOSITORY/contents/$FILE?ref=$GITHUB_REF_NAME" --jq '.sha')
-          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Mark Perfect Player v2 build success' -f content="$B64" -f sha="$OLD_SHA" -f branch="$GITHUB_REF_NAME" >/dev/null
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" -f message='[skip ci] Mark Perfect Player v3 build success' -f content="$B64" -f sha="$OLD_SHA" -f branch="$GITHUB_REF_NAME" >/dev/null

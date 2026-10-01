@@ -1,0 +1,100 @@
+name: Build Zhaoye iOS Shell
+
+on:
+  push:
+    branches:
+      - chatgpt-zhaoye-ios-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios-shell:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+
+      - name: Build device ARM64 shell
+        shell: bash
+        run: |
+          set -euxo pipefail
+          ROOT="$GITHUB_WORKSPACE/zhaoye-ios-shell"
+          OUT="$GITHUB_WORKSPACE/out"
+          APP="$OUT/Payload/ZhaoyeChangsheng.app"
+          mkdir -p "$APP/www"
+
+          SDK="$(xcrun --sdk iphoneos --show-sdk-path)"
+          xcrun --sdk iphoneos clang             -arch arm64             -isysroot "$SDK"             -miphoneos-version-min=15.0             -fobjc-arc             -fblocks             -Os             "$ROOT/main.m"             -framework UIKit             -framework WebKit             -framework Foundation             -o "$APP/ZhaoyeChangsheng"
+
+          chmod +x "$APP/ZhaoyeChangsheng"
+
+          cat > "$APP/Info.plist" <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleDevelopmentRegion</key><string>zh_CN</string>
+            <key>CFBundleDisplayName</key><string>照夜长生</string>
+            <key>CFBundleExecutable</key><string>ZhaoyeChangsheng</string>
+            <key>CFBundleIdentifier</key><string>com.zhaoye.changsheng.ios5</string>
+            <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+            <key>CFBundleName</key><string>照夜长生</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleShortVersionString</key><string>5.0.0</string>
+            <key>CFBundleVersion</key><string>50000</string>
+            <key>LSRequiresIPhoneOS</key><true/>
+            <key>MinimumOSVersion</key><string>15.0</string>
+            <key>UIDeviceFamily</key><array><integer>1</integer><integer>2</integer></array>
+            <key>UIRequiresFullScreen</key><true/>
+            <key>UIStatusBarHidden</key><true/>
+            <key>UIViewControllerBasedStatusBarAppearance</key><false/>
+            <key>UISupportedInterfaceOrientations</key>
+            <array>
+              <string>UIInterfaceOrientationLandscapeLeft</string>
+              <string>UIInterfaceOrientationLandscapeRight</string>
+            </array>
+            <key>UISupportedInterfaceOrientations~ipad</key>
+            <array>
+              <string>UIInterfaceOrientationLandscapeLeft</string>
+              <string>UIInterfaceOrientationLandscapeRight</string>
+            </array>
+            <key>CFBundleIcons</key>
+            <dict><key>CFBundlePrimaryIcon</key><dict><key>CFBundleIconFiles</key><array>
+              <string>AppIcon60x60</string>
+            </array></dict></dict>
+            <key>CFBundleIcons~ipad</key>
+            <dict><key>CFBundlePrimaryIcon</key><dict><key>CFBundleIconFiles</key><array>
+              <string>AppIcon60x60</string>
+              <string>AppIcon76x76</string>
+              <string>AppIcon83.5x83.5</string>
+            </array></dict></dict>
+          </dict>
+          </plist>
+          PLIST
+
+          cat > "$APP/www/index.html" <<'HTML'
+          <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><body style="margin:0;background:#071414;color:#eee;font-family:-apple-system"><div style="padding:30px"><h1>照夜长生</h1><p>iOS 壳构建成功，正式游戏资源将在打包阶段注入。</p></div></body></html>
+          HTML
+
+          plutil -lint "$APP/Info.plist"
+          file "$APP/ZhaoyeChangsheng"
+          lipo -info "$APP/ZhaoyeChangsheng"
+          otool -L "$APP/ZhaoyeChangsheng"
+
+          cd "$OUT"
+          /usr/bin/zip -qry "$GITHUB_WORKSPACE/Zhaoye-Changsheng-iOS-shell.ipa" Payload
+
+      - name: Upload IPA shell
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zhaoye-Changsheng-iOS-shell
+          path: Zhaoye-Changsheng-iOS-shell.ipa
+          if-no-files-found: error
+          compression-level: 0
